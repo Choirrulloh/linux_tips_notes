@@ -1,0 +1,9 @@
+hostnamectl (on systems running systemd)
+uname -a
+uptime (work relative to processing resources done in the past 1, 5 & 15 mins)
+df
+free
+who
+systemctl (all services)
+systemctl status syslog
+ip a

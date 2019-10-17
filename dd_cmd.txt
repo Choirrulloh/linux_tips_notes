@@ -1,0 +1,7 @@
+lsblk
+umount /dev/sdb1
+sudo dd if=~/Downloads/ubuntu_image.iso of=/dev/sdb status=progress
+hdiutil convert -format UDRW ~/Downloads/ubuntu_image.iso -o ~/Downloads/ubuntu1804
+check for BSD device node
+unmount the partition
+sudo dd if=~/Downnloads/ubuntu1804.dmg of=/dev/rdisk1 bs=1m

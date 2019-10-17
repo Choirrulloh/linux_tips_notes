@@ -1,0 +1,50 @@
+/etc/grub.d
+are grub scripts
+
+config file is in /etc/default/grub
+after changes, run grub2-mkconfig
+generates new configs for /boot/grub2
+
+
+init
+----
+init runs as pid 1
+runlevels and their numbering
+runlevel command
+shows previous and current runlevels
+(N = no runlevel previously)
+run levels are set with the init command commonly done using init scripts located in /etc/init.d (and run when the runlevel changes)
+eg /etc/init.d/ssh
+
+ls -ld /etc/rc*
+for each runlevel the scripts in /etc/init.d are symlinked into the directories that share the specific runlevels
+ls -l /etc/rc2.d/ for example
+A link file starting with 'S' indicates to use the start section of the linked script and a name starting with 'K' means to kill or stop the script
+The number following S/K indicates the order in which to run the script.
+name following that reflects the name of the script being linked to
+
+
+Own scripts
+----------
+/etc/rc.local
+is run at runlevel transitions
+
+All scripts can also be run manually using the service command followed by script name and an action argument
+eg. sudo service networking restart
+then name of the service is in /etc/init.d/. The argument is defined in that script in a switch/case statement
+Different distros treat runlevels differently and they offer different tools to work with the scripts & runlevel assignments
+
+systemd
+------------------------------------------------------------------------------
+Manages background services after the system has started
+logger, openssh, webserver, file server
+is pid 1
+running kernel -> usable userspace
+instead of runlevels, uses targets (composed of units/unit-files, which can start/run in parallel)
+"graphical" is the usual target of most systems
+Other targets (emergency, rescue)
+systemctl command
+systemctl status rsyslog.service 
+also shows how many processes it is currently supervising
+
+less /lib/systemd/system/rsyslog.service

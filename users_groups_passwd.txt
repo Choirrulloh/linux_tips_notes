@@ -1,0 +1,65 @@
+/etc/passwd  (user accounts on the system). lots of service accounts + maybe a couple of user accounts
+
+uname:x:uid:gid:gecos:location of home folder & working directory upon logging in: default shell
+
+x: encrypted passwd in /etc/shadow file
+
+uid: with 1000 or above are human users (or regular users) below 1000 are system accounts
+gid: numeric value for users primary group. Again the 1000 rule as above for regular/system groups
+uid & gid are actually used to resolve the names & groups 
+
+gecos: descriptive field name,location & phone information. Human-friendly name for the user, and some commas for the empty information
+
+default shell: set to false for system accounts
+
+
+/etc/shadow
+-----------
+
+1 username:
+2 * or ! or a string representing the encrypted passwd: * invalid hash. account has been disabled, ! : account has been locked
+3 days since epoch since passwd change:
+4 how long to wait to change their passwd  number of days until passwd expires:
+5 days before which to warn user of passwd expiry :
+6 how many days must pass before an account with an expired passwd will be disabled:
+7 how many days an account has been disabled
+8 reserved for future use
+
+/etc/group
+----------
+gname
+passwd (x implies no group passwd set)
+gid
+csv list of users in the group
+
+
+for particular user and group info, use the id or groups commands
+
+from the otherside use the getent command to see who is in a group
+getent group groupname
+
+adduser is a friendlier frontend for useradd
+
+/etc/skel is the skeleton home directory used as template for new users
+
+sudo addgroup newgroupname
+
+modify  group memberships (add/delete users)
+usermod
+sudo usermod -aG groupname uname
+-a (append information)
+-G (add a supplementary group), don't replace the user's primary group
+
+usermod (lock & unlock accounts)
+
+sudo usermod -L uname (lock account)
+sudo usermod -U uname (unlock account)
+
+sudo passwd 
+change current user's passwd
+sudo passwd uname
+change uname's passwd
+
+sudo delgroup groupname
+sudo deluser username (but uid and home dir will still exist). If a new person created an account with the same uid, they would have access to everything the old user created
+sudo deluser --remove-home username 

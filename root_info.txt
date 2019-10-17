@@ -1,0 +1,12 @@
+uid is 0
+only user created using default installation
+uname/groupname ALL=(ALL:ALL) ALL
+1st ALL -- user or group has sudo access on all machine controlled by this sudoers file. Machines can share a sudoers file.
+(ALL:ALL) -- (user and group) that this user/group can emulate. In this case, any user and any group
+ALL at the end -- use the superuser privilege to run any command. Can also specify a narrow list of allowed commands.
+
+sudo -i: run the target user's shell and switch into their home directory
+sudo -s: run the invoking user's shell
+sudo -l: list the sudo privileges a user has
+sudo -u: specify a user to operate as
+sudo -k: expire sudo timer

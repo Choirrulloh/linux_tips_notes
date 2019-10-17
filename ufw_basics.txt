@@ -1,0 +1,7 @@
+ufw allow 22/tcp
+ufw enable
+fail2ban
+adduser uname 
+usermod -aG sudo uname
+vim /etc/ssh/sshd_config & set PermitRootLogin no PubKeyAuthentication yes PasswordAuthentication no
+systemctl restart sshd

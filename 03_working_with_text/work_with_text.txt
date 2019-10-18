@@ -1,0 +1,51 @@
+grep -a 
+
+treat binary files as text (but can get garbage on screen)
+
+better to pass it through the strings command
+
+
+sed
+---
+
+append use the 'a' command
+
+eg sed "a newtext" file.txt will append 'newtext' to a new line
+
+insert before the last line, use the 'i' command
+insert before the 3rd line, sed "3i newtext" file.txt
+append after the 3rd line, sed "3a newtext" file.txt
+
+delete all lines, sed "d" file.txt
+delete 1st line, sed "1d" file.txt
+
+sed "/regex/d" file.txt
+sed "/regex/a appended_text" file.txt to append a line starting with "appended_text" to the line containing the regex 
+
+awk
+----
+
+awk '{print $1}' textfile
+awk '{print $2 $1}' textfile  (reorder fields)
+
+awk -F : '{print $1}' /etc/passwd
+awk '{print(toupper($1))}' textfile
+
+cut
+---
+pick a particular piece from a text string
+
+cut -d : -f 1 /etc/passwd
+-d delimiter
+-f field to extract
+
+
+cut by byte positions (-b option)
+by character (-c)
+cut -b 1-10 /etc/passwd
+
+sort
+----
+
+sort -r
+du -hd1 | sort -h

@@ -1,0 +1,33 @@
+location of blocks are stored in inodes
+inodes are kept in an inode table
+
+
+what we see as files in an 'ls' hierarchy are hardlinks to each file's inode
+When u access it, system looks up all the blocks that represents pieces of the file and return the data from them
+
+magic number to recognise file formats since extensions are not reliable
+a value at the beginning of a file
+
+use the 'file' command to get this info
+the 'stat' command is helpful too (to show more inode info,size etc)
+
+
+Archive
+-------
+tar czf nameofarchive.tar.xz dir_to_archive/
+c (create an archive)
+f (put the resulting archive into a file)
+t (take a peek inside the archive)
+z (use gzip for compression)
+j (use bzip2)
+
+tar tf nameofarchive.tar
+
+tar xf nameofarchive.tar
+to extract in current working directory
+
+tar xf nameofarchive.tar -C name_of_dir_to_extract_to/
+
+zip nameofarchive.zip  dir_to_archive/*
+
+unzip nameofarchive.zip -d name_of_dir_to_extract_to/

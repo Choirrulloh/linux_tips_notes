@@ -1,0 +1,55 @@
+apt search "directory tree"
+aptitude is like an ncurses interface to dpkg
+dpkg --info package.deb
+dpkg doesn't do dependency resolution
+dpkg -P packagename to purge 
+view files in a package by 
+dpkg --contents packagename
+after package is installed, list files installed by the package by dpkg -L packagename
+
+Show which package installed a file with
+deb -S /path/to/file
+
+List installed packages on a system with
+dpkg -l
+
+
+yum search nano
+yum info nano (to show specific info about a particular package)
+yum list (list all packages installed on the system)
+yum list available (list packages available to install)
+yum list all (list both installed and available packages)
+yum list pkgname
+
+which package provides a particular cmd
+
+yum provides nslookup
+
+sudo yum install
+
+sudo yum remove
+
+sudo yum update [pkgname]
+
+yum grouplist
+yum groupinfo
+
+yum groupinfo "scientific support"
+sudo yum groupinstall "scientific support"
+sudo yum groupremove "scientific support"
+sudo yum groupupdate
+
+
+rpm -qip filename.rpm (to look at its metadata)
+q = query
+i = information
+p = select option to look at a package file rather than an already installed package
+
+rpm -qlp filename.rpm (to look at files included in the package)
+rpm -qRp filename.rpm (what this package requires ie. dependencies)
+sudo rpm -i filename.rpm (to install)
+rpm -qi filename.rpm (to look at metadata of already installed package)
+rpm -U filename.rpm (to update a package)
+rpm -e filename.rpm (to remove a package)
+rpm -ql filename.rpm (to look at files installed by the package)
+rpm -qf /path/to/file (to look at which package  installed the given file)

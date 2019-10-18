@@ -1,0 +1,20 @@
+mkdir myapp_1.0
+mkdir myapp_1.0/DEBIAN
+nano myapp_1.0/DEBIAN/control
+    Package: myapp
+    Version: 1.0
+    Maintainer: John Doe <john.doe@example.com>
+    Architecture: all
+    Description: Lorem ipsum dolor software
+    This software promises the world but delivers nothing
+    important, hence be forewarned.
+mkdir -p myapp_1.0/usr/bin
+nano myapp_1.0/usr/bin/myapp
+    #!/usr/bin/env bash
+    echo "This text came from a custom application!"
+sudo chown -R root:root myapp_1.0/
+sudo chmod -R 755 myapp_1.0/usr/
+sudo chmod 644 myapp_1.0/DEBIAN/control
+dpkg-deb --build myapp_1.0/
+Linux Foundation Cert Prep: System Design and Deployment
+

@@ -1,0 +1,8 @@
+du -hd1 dir_name/
+du -hd0 dir_name/ = du -sh dir_name/ (s; summary)
+find / -type f -size +2M -exec ls -sh {} | sort -h
+files greater than 2M in root
+M = MB, k = kB
+s: summary
+{} results for each line
+; - escape semicolon

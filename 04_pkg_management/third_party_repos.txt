@@ -1,0 +1,44 @@
+Third party repositories
+
+apt repositories are listed at /etc/apt/sources.list and individual files in /etc/apt/sources.list.d/ directory
+nano /etc/apt/sources.list.d/plex.list 
+
+deb
+or deb-src
+
+deb https://downloads.plex.tv/repo/deb public main
+
+'public' - distribution
+sometimes 'testing'
+'main' branch
+curl https://downloads.plex.tv/plex-keys/PlexSign.key | sudo apt-key add -
+
+grep in /var/lib/apt/lists/  to know the actual name of the package
+
+apt cache show "plex*"
+apt install plexmediaserver
+sudo rm /etc/apt/sources.list.d/plex.list
+sudo apt-key list
+find the signature for  the key, copy the long hex string
+sudo apt-key del 'paste the long key here'
+
+
+for scripting, there is an easier way by using add-apt-repository. Same as above for getting the key
+
+sudo add-apt-repository "deb https://downloads.plex.tv/repo/deb public main"
+
+
+For yum
+------
+/etc/yum.conf
+/etc/yum.repos.d/
+
+[PlexRepo]
+name=PlexRepo
+baseurl=https://downloads.plex.tv/repo/rpm/$basearch/
+enabled=1
+gpgkey=https://downloads.plex.tv/plex-keys/PlexSign.key
+gpgcheck=1
+
+yum list plexmediaserver
+can host it somewhere and iinstall it using a cli tool called yum config manager

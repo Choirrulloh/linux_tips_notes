@@ -1,0 +1,33 @@
+a file that contains a filesystem
+file can be moved to other systems to take the filesystem along with it
+iso images like linux installers are loop devices
+snaps use loop devices for their permanent filesystem
+macos calls them "disk images"
+
+
+can create them using dd or fallocate command (fast). Can write zeros to a file
+fallocate -l 1G myimage
+sudo mkfs.ext4 myimage
+use fallocate again to make this image sparse (so that it doesn't actually take up space on the disk)
+fallocate -d myimage
+can shrink and grow as data is added to it
+
+create a place to mount it and mount
+mkdir /mnt/myfiles
+sudo mount myimage /mnt/myfiles
+
+ll /dev/loop*
+losetup to explore loop devices
+
+move out of the mount folder and umount it
+umount /mnt/myfiles
+
+set gid bit
+sudo chmod 2775 /shared_folder
+after adding new users to this group need to log out & back in for changes to take effect
+sudo chgrp shared_group_name /shared_folder
+
+debian umask is 022 which means files created by user will be 644 (group will have only read access)
+other distros have umask 0022, meaning 664 giving users in the group write access 
+can set the umask in each user's .bashrc file
+

@@ -1,0 +1,13 @@
+Login Shell
+-----------
+
+/etc/profile
+~/.bash_profile
+~/.bash_login
+~/.profile
+
+Non-Login Shell
+-----------
+/etc/bash.bashrc
+~/.bashrc
+will inherit settings from its parent shell

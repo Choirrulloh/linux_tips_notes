@@ -1,0 +1,68 @@
+because of the existence of netfilter (networking guts of the linux kernel)
+but can't directly configure netfilter. Hence, we need some tools
+
+Two conflicting daemons that both can be used to make netfilter do its thing
+1. iptables (older, might be deprecated in the future)
+2. firewalld (newer, but different security metapho, easier to configure)
+
+cannot run both at the same time on the same system
+require some mutual exclusion rules before we can get started
+
+systemctl status iptables
+iptables is located under /sbin/  (symlinked to xtables-multi)
+
+to prevent it from running in the future, do systemctl mask iptables will symlink to /dev/null. need to stop the daemon before masking
+
+Other rule-based firewalls
+--------------------------
+iptables
+ip6tables
+arptables
+ebtables
+sudo iptables -L -n -v  (to list the current rules in numeric format verbosely)
+
+nc destination_ip port_no
+some text to send
+
+nc -lp  4545   (listen on port 4545)
+
+will appear on the above netcat session
+
+sudo iptables -A INPUT -s source_ip -j DROP
+-A (append to current set of rules in the input chain)
+-s source address
+-j specifies the action to take
+
+sudo iptables -R INPUT 1 -s source_ip -p tcp --dport 4545 -j DROP
+-R Replaces the above rule with a new rule to drop any tcp packets packets onto 4545 from the source ip 
+
+sudo iptables -D INPUT 1  (delete the rule above)
+
+can also do source_ip/26 for example
+
+-m connlimit --connlimit-above 2  (max 2 concurrent connections)
+
+Ordering matters
+----------------
+REJECT rule  (eg. the above concurrent rule)
+then ACCEPT rule
+
+sudo iptables -R INPUT 1 -s source_ip -p tcp --dport 4545 -j DROP
+
+Rate-limiting traffic (directed to ports 80 & 443) from anywhere 
+sudo iptables -A INPUT -p tcp -m multiport --dports 80,443 -m limit --limit 120/minute --limit-burst 250 -j ACCEPT
+
+
+Diver telnet traffic  to a honeypot
+sudo iptables -t nat -A PREROUTING -p tcp --dport 23 -j DNAT --to 10.0.2.199
+
+Log dropped packets
+sudo iptables -A INPUT -j LOG --log-prefix "ipt-block:"
+
+Block any other input
+sudo iptables -A INPUT -j DROP
+
+Check the NAT table
+-------------------
+sudo iptables -t nat -L -n
+

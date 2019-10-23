@@ -1,0 +1,90 @@
+truncate command to create a file of specified size
+
+ssh file transfer protocol (sftp)
+emulates the commands of ftp over an ssh connection
+ftp is notoriously insecure
+sftp user@hostname
+type 'help' at command prompt
+get, put, cd & pwd
+get myfile
+put myfile
+bye to exit 
+
+
+ssh keys
+--------
+
+ssh-keygen (rsa/2048 bits for normal users)
+logon to server and create a file ~/.ssh/authorized_keys
+ssh-add to add the key to eg gnome-keychain
+
+ssh user@host -i ~/.ssh/id_rsa
+
+ssh-keygen -lf ~/.ssh/id_rsa (to find the fingerprint of a key)
+
+secure tunnels
+--------------
+Forward traffic on a local port to a remote port (database servers or development web servers)
+reduce outside exposure down to just one ssh port
+ssh -L (local port forwarding)
+The local port can be anything above 1024
+starts a regular regular ssh session in addition to opening up a secure tunnel between port 3232 and port 80
+ssh -L 3232:remotehost:80 user@remotehost      for a service running on the remotehost
+3232 is the local port on the client machine: destination system: port that we want to tunnel to (in this case 80) followed by login info on the remote system
+
+where the desired server is running on a different device (otherhost), we use the following
+ssh -L 3232:otherhost:80 user@remotehost      for a service running on the remotehost
+
+
+ssh -L 3232:remotehost:80 user@remotehost -N  (-N tells not to execute a remote cmd, so we wont get a shell)
+
+
+SOCKS proxy
+-----------
+openssh-server can act as a SOCKS proxy (socket secure)
+Allows the ssh server to forward traffic from client through proxy server, i.e. as though it is coming from the ssh server itself
+can be used to control web access
+can allow web access from restricted networks (quick & easy VPN, coffee shop or airplane wifi)
+organizational policy is very important here
+
+ssh -D 3232 user@remotehost -Nq
+-D dynamic port forwarding
+3232 (for example only), 1080 is the standard port, but can be anything
+-q (quiet mode)
+
+Best to use an AWS cloud server as your proxy server
+
+can proxy individual applications (like a browser) or entire system-level settings
+
+go to browser settings and enter the details of the proxy configuration (localhost & port name). Send DNS queries to the proxy service (privacy tip). Also helpful in an untrusted network or in a network that filters DNS lookups. Doesn't affect cookies, caches etc. Just like a long cable to plug into another network. Can slowdown browsing
+
+After closing the tunnel, got to clear the config from the browser; otherwise browser can't connect to anything
+
+
+SOCKS proxy #2
+--------------
+SOCKS only for web-traffic rather than all network traffic (unlike a VPN)
+Proxying is different from packet routing since it works on a different layer
+Dedicated software package or openssh-server
+But that port will be open to anyone and everyone on the internet. Running an open proxy can be dangerous
+set up firewall access to only those particular IP addresses that we trust (or network or something like that)
+SOCKS allows for password authentication, but SSH does not allow that
+ssh -D 1080 localhost
+
+Other option is to set up a local port on your local computer and listen there for local web traffic that will then be tunnelled through SSH to a remote server
+ssh -D 3232 user@remotehost -Nq (slightly better option in terms of security)
+-f fork process into the background after it sets up the tunnel
+-C some compression
+
+ssh -D 3232 -NCqf user@remotehost 
+ to close the tunnel, need to find the PID and kill it manually
+
+
+Squid proxy
+----------
+Consolidate internet access through a single host
+
+on the proxy server:
+apt install squid
+/etc/squid/squid.conf
+sed -e "/^#/d" /etc/squid/squid.conf | awk NF

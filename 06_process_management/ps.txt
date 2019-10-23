@@ -1,0 +1,23 @@
+ps -C commandname
+show the process with that command name
+ps -fC commandname
+-f full-listing
+
+instead of -f,  -jH for tree-format (helpful for human eyes)
+H = hierarchical
+j = jobs-format wherein we get process group id and session id as well
+
+-u effective user
+-U real-user
+
+ps -u krishna shows a lot of options
+
+better managed with ps -fHU krishna
+
+-e for everything
+might be useful with hierarchical view
+
+default kill signal is called sigterm (-15)
+more forceful signal is sigkill (-9)
+
+kill -l to get a list

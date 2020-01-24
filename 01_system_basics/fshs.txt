@@ -1,0 +1,25 @@
+MacOS FSHS
+----------
+/
+├── Applications
+├── Library
+├── System
+├── Users
+├── Volumes
+├── bin
+├── cores
+├── dev
+├── etc -> private/etc
+├── home -> /System/Volumes/Data/home
+├── opt
+├── private
+├── sbin
+├── tmp -> private/tmp
+├── usr
+└── var -> private/var
+
+16 directories, 0 files
+
+Linux FSHS
+----------
+

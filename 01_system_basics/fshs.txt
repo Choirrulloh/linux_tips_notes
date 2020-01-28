@@ -20,6 +20,92 @@ MacOS FSHS
 
 16 directories, 0 files
 
-Linux FSHS
-----------
+Linux FSHS (eg. Ubuntu)
+-----------------------
+
+/
+├── bin -> usr/bin
+├── boot
+├── cdrom
+├── dev
+├── etc
+├── home
+├── lib -> usr/lib
+├── lib32 -> usr/lib32
+├── lib64 -> usr/lib64
+├── libx32 -> usr/libx32
+├── lost+found
+├── media
+├── mnt
+├── opt
+├── proc
+├── root
+├── run
+├── sbin -> usr/sbin
+├── snap
+├── srv
+├── swapfile
+├── sys
+├── tmp
+├── usr
+└── var
+
+24 directories, 1 file
+
+Explanation of the FSHS
+-----------------------
+
+bin    : programs that the system needs to work, even in single user mode. Includes the shell, ls, cat etc. and other critical components for working with the OS
+boot   : (linux only) kernel and initial RAMdisk which the system needs in order to start up
+cdrom  :
+dev    : files that refers to devices on the system (disks, virtual devices and more)
+etc    : (MacOS: symlinked to /private/etc) config files for software and tools
+home   : (unused symlink to non-standard location in MacOS, /Users in MacOS) users' home folders with personal data
+lib    : (not in MacOS. In linux, symlink to /usr/lib) libraries associated with essential system binaries. 
+lib32  :
+lib64  :
+libx32 :
+media  : (not in MacOS?) removable media is mounted into this folder
+mnt    : (linux only). Mount point for hard drives, network shares and other media
+opt    : optional packages installed by the user (not required for the operation of the system)
+proc   : (linux only). presents information about kernel and processes running on the system as files (kernel settings and process parameters)
+root   : (linux only). root's personal information and documents
+run    : (linux only). Information about running processes (lock files, PIDs etc) and other information about the system as it runs such as the motd and whether a reboot is required.
+sbin   : system binaries and administration utilities. Tools that manage every aspect of the system from tools that create the filesystem on disks to managing the network connections and others
+srv    : (linux only). Files served by the system. Set aside as a place to store information that various server software provides to clients (ftp, nfs etc)
+sys    : (linux only). gives us files that Represents parts of the system (lists of disks,fs,devices etc).
+tmp    : (On MacOS, symlinked to /private/tmp). Temporary information while it is being worked on. Permissions are very loose. Easy for programs to put info
+usr    : Tools and utilities for many purposes on the system.Has a subfolder (second major) hierarchy, includes subdirectories that contain information, configuration files, and other essentials used by the operating system. /usr/bin, /usr/sbin and /usr/local.
+var    : is for variable data that is not considered temporary. Logs, and stuff that will "vary" during the operating system operation 
+
+
+
+MacOS-specific
+--------------
+Applications : all your Mac apps should go there (unless you have an app that you want to be visible for only one user.  Normal users can read, but admins can also drop things in there. 
+
+cores        : MacOS only This is where OS X stores Core Dumps. These are files that are intended for developers to troubleshoot and diagnose faults in their software. They are generated as software crashes. If you are not a developer, or aren't testing software for a developer, then these files serve no purpose for you. By default, OS X is set up not to generate core dump files. If you type sudo launchctl limit core in a Terminal window it will respond with the soft and hard size limits of dump files it is allowed to create. Soft limit means the default for each process, however processes can change this if they require but only up to the value of the hard limit. By default the values in OS X seem to be "0 unlimited" means that the operating system won't create core dumps by default, but processes can elect to have unlimited core dump files created if they wish. You can change the setting on your machine by simply entering sudo launchctl limit core 0 0 to disable the feature entirely. sudo launchctl limit core 0 unlimited will restore the default behaviour if it has been changed.
+
+Developer : if you install Xcode and the developer libraries, this folder will magically bring the unicorns for developing awesome Cocoa apps, iOS apps and dashboard widgets among other things. Otherwise the folder doesn't even exist.
+
+Library : Shared libraries, and files necessary for OS X to actually function. Preferences, settings, app stuff, browser plug-ins (or more specifically, how to get rid of Adobeb's Flash) ;) You usually don't tamper around here, but it's normal if you want to clear some Apps settings, fix something, remove or install browser plugins, extensions, etc. Sometimes you will venture into /Library. Handle with care and always backup before breaking stuff here. It would be hard to destroy an OS X install by tampering /Library, but it's possible
+
+Network : All network libraries, servers, devices, etc. You shouldn't be here unless you know what you're doing and want to bypass GUI utilities. 
+
+System : Everything that OS X needs to properly function is here. I'd say that you shouldn't touch anything or problems will arise. 
+
+private      : MacOS only. It is part of your Mac: the directory stores essential system files and caches, along with other databases that your system requires to operate.
+  /private/etc : Data files for system use, configurations for various command line tools etc
+  /private/tmp : System logs, mostly
+  /private/var : More logs, databases for daemons, virtual memory swap file(s), sleep image etc. the "sleepimage" file is the largest file of all in /private.
+/private is a holdover from NextStep (which OS X is based on), and NextStep did it to support NetBooting. The idea was that you could boot from a network-hosted volume (probably read-only, and certainly shared with other computers), and early in the boot process mount a local (writable) volume on /private; as g mentioned, this allowed runtime-modification of /var and /tmp, as well as per-computer settings in /etc.
+This isn't needed anymore, as Apple's current NetBoot system uses a shadow disk image to store changes anywhere on the boot volume. But some programs/docs/etc now assume the files live under /private, so it'd be too much trouble to switch them back...
+You can safely delete anything in /private/var/folders/ but not the folder itself
+sudo rm -rf /private/var/folders/*
+Quit all apps before you do & reboot afterwards . And whatever you do, don't touch anything else in /private/var/, and do not delete /private/var/folders/ itself.
+Even the automount service doesn't mount shares to /private, it's mounted in /Volumes. 
+
+Users : This is the equivalent to Unix and Linux's /home directory. And here you will have sub directories for each of your users: /Users/John, /Users/Doe, etc. 
+
+Volumes: Mounted stuff/devices and volumes, real or virtual (think of CDs, DMGs, samba shares, etc), get their own "directory" here. So if you mount a smb share called MyShare, you can 'cd /Volumes/MyShare' to access it from the Command Line. The Finder will happily hide this from you (unless you set it to show invisible files I think).
 

@@ -1,8 +1,22 @@
+df -h
+df -h / (narrows down the display a little bit)
+
+Linux-only max depth (-d number) option for 'du'
 du -hd1 dir_name/
 du -hd0 dir_name/ = du -sh dir_name/ (s; summary)
-find / -type f -size +2M -exec ls -sh {} | sort -h
+interesting tools based on du (duviz, dutree and ncdu)
+
+To find large files
+------------------------------
 files greater than 2M in root
+find / -type f -size +2M -exec ls -sh {} \; | sort -h
 M = MB, k = kB
-s: summary
++2M (>2MB)
+ls -sh (summary)
 {} results for each line
 ; - escape semicolon
+
+
+Keep an eye on /boot to remove old kernels and initramfs
+apt autoremove && update-grub
+lack of space can even prevent a sstem from booting up correctly

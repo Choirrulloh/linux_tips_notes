@@ -1,13 +1,22 @@
+                    Login                                   Non-Login
+Interactive         Initial shell (console/ssh login)       any subsequent shell (eg opening a terminal window)
+Non-interactive     rarely used                             temporary life eg when running a bash script
+
+
+
 Login Shell
 -----------
 
-/etc/profile (calls /etc/bash.bashrc in an ubuntu system which is somewhat not correct)
-~/.bash_profile (best practice to call ~/.profile and ~/.bashrc if using bash as the main shell)
-~/.bash_login
-~/.profile (calls ~/bashrc in an ubuntu system, which isn't really the best practice). keep settings not-specific to bash here eg $PATH
+1) Reads /etc/profile (sources /etc/bash.bashrc in an ubuntu system, and /etc/bashrc on macOS to set system-level paths and environmental variables on users shells.). Then the bash shell looks for one of the following three
+    ~/.bash_profile (best practice to call ~/.profile and ~/.bashrc if using bash as the main shell)
+    ~/.bash_login
+    ~/.profile (sources ~/.bashrc in an Ubuntu system). This is for keeping environment settings not-specific to any particular shell eg $PATH
 
 Non-Login Shell
 -----------
-/etc/bash.bashrc
-~/.bashrc  (bash-specific settings only, PS1, PS2, aliases and functions etc). This file is read by sub-shells etc.
+1) Reads /etc/bash.bashrc, and then looks for:
+    ~/.bashrc  (bash-specific settings only, PS1, PS2, aliases and functions etc). This file is read by sub-shells etc.
 will inherit settings from its parent shell
+
+
+In addition to setting the environmental items the /etc/profile will execute the scripts within /etc/profile.d/*.sh.

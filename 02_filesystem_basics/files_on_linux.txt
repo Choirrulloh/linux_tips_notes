@@ -6,7 +6,7 @@ what we see as files in an 'ls' hierarchy are hardlinks to each file's inode
 When u access it, system looks up all the blocks that represents pieces of the file and return the data from them
 
 magic number to recognise file formats since extensions are not reliable
-a value at the beginning of a file
+a particula value at the beginning of a file
 
 use the 'file' command to get this info
 the 'stat' command is helpful too (to show more inode info,size etc)

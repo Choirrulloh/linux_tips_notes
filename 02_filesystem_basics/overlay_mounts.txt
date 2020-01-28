@@ -1,4 +1,4 @@
-allow us to lay one set of files on top of another creating what looks like a single set of files 
+allow us to lay one set of files on top of another creating what looks like a single set of files
 
 eg. user-modifiable layer on top of a root fs
 lower fs (often a read-only fs, possible to do more than 1 lower fs) + upper fs (usually writable fs)
@@ -13,8 +13,10 @@ touch fs_b/b_file_{0..5}
 echo "This is on filesystem A!" > fs_a/myfile
 echo "This is on filesystem B!" > fs_b/myfile
 md working
-md myoverlay
+md myoverlay (to serve as mountpoint)
 
+Creating an overlay mount
+--------------------------------------------------------------------------------
 sudo mount -t overlay overlay -o lowerdir=fs_a,upperdir=fs_b,workdir=working myoverlay
 mntpoint is myoverlay
 
@@ -26,9 +28,12 @@ cat myfile will show the echo to B fs
 
 editing a file from the lowerfs will simply copy it to the upper fs
 eg vim a_file_0
-will copy it to the upper fs
+will copy the file to the upper fs
 
-Used very widely in embedded systems (no power guarantees), so keeping health of a fs can be tricky. Boot from RO fs, and then layer on top of that. If a write operation is happening and the system loses power, the lower FS is protected from bad writes. data may be lost, but systems integrity is protected
+
+can be used to merge volumes together into one filesystem
+
+Used very widely in embedded systems (no power guarantees), so keeping health of a fs can be tricky. Boot from RO fs, and then layer more filesystems on top of that. If a write operation is happening and the system loses power, the lower FS is protected from bad writes. data may be lost, but the system's integrity is protected
 
 
 Also used in live-boot linux disks

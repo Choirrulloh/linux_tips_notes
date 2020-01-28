@@ -1,33 +1,69 @@
-a file that contains a filesystem
-file can be moved to other systems to take the filesystem along with it
-iso images like linux installers are loop devices
-snaps use loop devices for their permanent filesystem
-macos calls them "disk images"
+loop devices are basically a file that contains a filesystem
+file can be moved to other systems and we can take the filesystem along with it
+
+loop devices are very common
+iso images like linux installers are loop devices (they are a file that contains a file system)
+snaps use loop devices for their permanent read-only filesystem
+also used where portable encrypted filesystems are needed (like TrueCrypt)
+macos makes extensive use of loop device in what is known as "disk images"
 
 
-can create them using dd or fallocate command (fast). Can write zeros to a file
-fallocate -l 1G myimage
+can create loopdevices using dd or fallocate command (fast). dd will be able to write zeros to a file
+fallocate -l 1G myimage  (fallocate is not in macOS)
 sudo mkfs.ext4 myimage
-use fallocate again to make this image sparse (so that it doesn't actually take up space on the disk)
+use fallocate again to make this image sparse (so that it doesn't actually take up that much space as it can contain)
 fallocate -d myimage
 can shrink and grow as data is added to it
 
-create a place to mount it and mount
+create a place (folder) to mount it and then mount
 mkdir /mnt/myfiles
 sudo mount myimage /mnt/myfiles
 
 ll /dev/loop*
-losetup to explore loop devices
+most entries are usually block devices (start with a b before the permissions list)
+losetup to explore loop devices a bit more
 
 move out of the mount folder and umount it
 umount /mnt/myfiles
 
+ls -lh myimage will show 1.0G based on metadata
+but, du -h myimage will show the space it is actually taking, reflecting that this is a sparse file
+
+
+Shared Directories
+--------------------
+
+sudo mkdir /srv/shared (only root has read and write privileges)
+even after completely opening up permissions, the files inside it won't be writable by other users
+eg. sudo chmod 777 /srv/shared
+echo "hello" > /srv/shared/myfile
+
+su user2
+can't edit /srv/shared/myfile. Only user1 has the correct privileges.
+pretty tedious to edit permissions for other users in  a group etc.. Not sustainable
+rm /srv/shared/myfile
+
+
+so, tag the directory with a special bit indicating which group members can access
+
 set gid bit
 sudo chmod 2775 /shared_folder
+sudo chmod g+s /shared_folder
+eg. sudo usermod -aG filesharers uname
+eg. sudo usermod -aG filesharers scott
+eg. sudo usermod -aG filesharers krishna
+eg. sudo usermod -aG filesharers user2
 after adding new users to this group need to log out & back in for changes to take effect
+
 sudo chgrp shared_group_name /shared_folder
+sudo chgrp filesharers /srv/shared
 
-debian umask is 022 which means files created by user will be 644 (group will have only read access)
-other distros have umask 0022, meaning 664 giving users in the group write access 
+On some distros this is all that we need to do. But on Debian distros such as Ubuntu, we need to take an additional step here.
+umask: file creation mask for the user, which determines what the permissions on a newly created file are going to be
+
+Krishna note: Total for masked permissions is 6 (six)
+-----------------------------------------------------
+debian umask is 0022 which means files created by user will be 644 (group will have only read access)
+other distros have umask 0002, meaning 664 giving users in the group write access
+can either manually set the umask for each individual file
 can set the umask in each user's .bashrc file
-

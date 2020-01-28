@@ -1,0 +1,26 @@
+A bind mount allows us to mount a filesystem or a subset of a filesystem in two places at once.
+There are various reasons wherein parts of a filesystem need to be available in different places.
+Used when chrooting to rescue a system (mount certain system directories such that tools in one linux installation can work with them as though they belong to it, rather than to another installation)
+
+bind mounts can also be used to control access to certain files (if a program or a user needs to access only one specific part of a filesystem, but not the rest of it)
+Also, used to offer a read-only copy of a filesystem (to avoid the problem of a program or user overwriting or removing data)
+
+can also be used to temporarily mask or replace one file with another (while preserving the original file behind the scenes)
+
+example 1
+--------------------
+mkdir  mylogs  (i.e. my proxy directory (stand-in))
+sudo mount --bind /var/log mylogs
+ls mylogs  (show the same files as in /var/log, not a copy or anything like that. same permissions, modification times etc.)
+sudo umount mylogs
+
+
+example2 (temporarily replace a file)
+------------------------------
+echo "This is the original file" > myfile
+echo "This is the other file" > myfile2
+sudo mount --bind myfile2 myfile
+cat myfile
+will show the contents of the other file
+effectively we have one file with two names
+after umounting, the original one is untouched

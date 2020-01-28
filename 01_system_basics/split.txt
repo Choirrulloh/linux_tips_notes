@@ -1,4 +1,9 @@
 split -b 1M -d myphoto.jpg myphoto.jpg.part
+divide by bytes
 md5sum myphoto.jpg
 cat myphoto.jpg.part00 myphoto.jpg.part01 myphoto.jpg.part02 myphoto.jpg.part03 > myphoto_stiched.jpg
-echo "askhdjkadjg4782jg23723748hh myphoto_stiched.jpg" md5sum -c
+echo "askhdjkadjg4782jg23723748hh myphoto_stiched.jpg" | md5sum -c
+
+
+split can split up a file by line number (useful for text)
+or by size amid others

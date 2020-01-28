@@ -1,11 +1,13 @@
 read crontabs every minute
-/var/spool/cron/ contains crontabs
-/etc/cron.d/ contains individual crontabs for software or other purposes with custom schedules
-/etc/crontab specifies where to look for daily weekly and monthly tasks
-references cron.hourly, cron.daily, cron.weekly and cron.monthly
-is populated on Debian-based systems, but empty on redhat systems though
 
-redhat uses /etc/anacrontab instead
+on both redhat and debian
+/var/spool/cron/ contains crontabs
+/etc/cron.d/ contains individual crontabs for software or other purposes with custom schedules (typically redhat)
+/etc/crontab specifies where to look for daily weekly and monthly tasks on Debian systems
+    references cron.hourly, cron.daily, cron.weekly and cron.monthly
+    is populated on Debian-based systems, but empty on redhat systems though
+
+redhat uses /etc/anacrontab instead for these intervals
 
 on the user crontabs, the user field will be blank
 

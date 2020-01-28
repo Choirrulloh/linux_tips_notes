@@ -1,13 +1,13 @@
 Login Shell
 -----------
 
-/etc/profile
-~/.bash_profile
+/etc/profile (calls /etc/bash.bashrc in an ubuntu system which is somewhat not correct)
+~/.bash_profile (best practice to call ~/.profile and ~/.bashrc if using bash as the main shell)
 ~/.bash_login
-~/.profile
+~/.profile (calls ~/bashrc in an ubuntu system, which isn't really the best practice). keep settings not-specific to bash here eg $PATH
 
 Non-Login Shell
 -----------
 /etc/bash.bashrc
-~/.bashrc
+~/.bashrc  (bash-specific settings only, PS1, PS2, aliases and functions etc). This file is read by sub-shells etc.
 will inherit settings from its parent shell

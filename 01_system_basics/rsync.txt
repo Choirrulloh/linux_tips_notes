@@ -1,0 +1,8 @@
+rsync -avz * /media/krishna/usb-disk  
+copy everything in current folder to usb-disk
+-a (archive mode), shortcut for a whole bunch of other options
+-v verbose
+-z compression
+
+--delete (delete files from destination that were removed from the source directory)
+add to cron

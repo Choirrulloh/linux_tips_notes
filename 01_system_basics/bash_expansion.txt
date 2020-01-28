@@ -1,0 +1,3 @@
+mkdir -p ./folder/tree/{apple,banana,orange,papaya,grape}
+
+Other expansions are parameter expansion, arithmetic expansion and command substitution

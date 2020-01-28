@@ -1,0 +1,1 @@
+functions greplog() { grep $1 /var/log/syslog; }

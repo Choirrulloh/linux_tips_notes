@@ -1,0 +1,5 @@
+echo $((5+4))
+uses only integer math
+echo $((a+=1))
+
+

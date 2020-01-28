@@ -1,0 +1,7 @@
+cat << EOF
+Mary had a little lamb
+and everywhere that mary went
+she was praised nicely
+and everyone liked her a lot!
+Her teachers were happy for her
+EOF

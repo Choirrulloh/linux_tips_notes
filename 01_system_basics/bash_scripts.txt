@@ -1,0 +1,4 @@
+shebang/usr/bin/env bash
+myVar=42
+read -p "what is your name?"  name
+echo "Hello, $name. The meaning of life is $myVar and the date is $(date)"

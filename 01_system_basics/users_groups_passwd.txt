@@ -1,4 +1,4 @@
-/etc/passwd  (user accounts on the system). lots of service accounts + maybe a couple of user accounts
+(Not on macOS) /etc/passwd  (user accounts on the system). lots of service accounts + maybe a couple of user accounts
 
 uname:x:uid:gid:gecos:location of home folder & working directory upon logging in: default shell
 

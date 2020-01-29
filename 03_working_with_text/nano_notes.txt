@@ -1,0 +1,6 @@
+C-space move by words
+meta-space move back by words
+escape key is meta key in nano and emacs
+C-p, C-n etc work
+C-f works
+C-v and C-y for forward and backward screenwise movement

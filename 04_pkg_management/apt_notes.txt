@@ -1,0 +1,4 @@
+apt list
+apt show  (for detailed info about a package)
+apt search "directory tree"
+aptitude is an ncurses alternative to apt (which includes a resolver to help with dependency issues)

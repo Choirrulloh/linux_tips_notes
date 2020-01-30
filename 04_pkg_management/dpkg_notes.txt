@@ -1,0 +1,15 @@
+Needs .deb file
+---------------
+dpkg --info <pkg_name.deb>
+dpkg -i <pkg_name.deb>  dpkg does not resolve dependencies. So have a look and manually install them if necessary
+dpkg -c or --contents <pkg_name.deb> (List contents of a local package file:)
+
+
+Works with standard installed packages
+--------------------------------------
+dpkg -r <pkg_name>
+dpkg -P <pkg_name> (remove all config files also, i.e. purge)
+dpkg -L <pkg_name> (list all the files installed by a package)
+dpkg -S filename (show which package installed a particular file)
+dpkg -l (list all the packages installed on a particular system)
+dpkg -l <pkg_name or pattern> (show a summary of a specific package installed on a system)

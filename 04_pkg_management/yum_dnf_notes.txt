@@ -1,0 +1,24 @@
+yum search <pkg_name> equivalent to apt search <pkg_name>
+yum info <pkg_name>   equivalent to apt show <pkg_name>
+yum list              equivalent to apt list --installed   dpkg -l (list all the packages installed on a particular system)
+yum list available    equivalent to apt list
+yum list <pkg_name>   dpkg -l <pkg_name> (show a summary of a specific package installed on a system)
+
+
+yum provides commandname  (which package provides a particular command!)
+
+yum install pkg_name
+yum remove pkg_name
+yum update (needs sudo) is actually equivalent to apt upgrade
+
+yum update pkg_name to upgrade specific packages
+
+
+for working with groups of packages
+-----------------------------------
+yum grouplist
+yum groupinfo
+yum groupinfo "Scientific Support"
+yum groupinfo "Scientific Support"
+yum groupremove "Scientific Support"
+yum groupupdate "Scientific Support"

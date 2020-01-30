@@ -2,8 +2,8 @@ apt search "directory tree"
 aptitude is like an ncurses interface to dpkg
 dpkg --info package.deb
 dpkg doesn't do dependency resolution
-dpkg -P packagename to purge 
-view files in a package by 
+dpkg -P packagename to purge
+view files in a package by
 dpkg --contents packagename
 after package is installed, list files installed by the package by dpkg -L packagename
 
@@ -45,11 +45,18 @@ q = query
 i = information
 p = select option to look at a package file rather than an already installed package
 
+l = list
 rpm -qlp filename.rpm (to look at files included in the package)
+
+R = Requires
 rpm -qRp filename.rpm (what this package requires ie. dependencies)
+
 sudo rpm -i filename.rpm (to install)
-rpm -qi filename.rpm (to look at metadata of already installed package)
-rpm -U filename.rpm (to update a package)
-rpm -e filename.rpm (to remove a package)
-rpm -ql filename.rpm (to look at files installed by the package)
+rpm -qi installed_packaged (to look at metadata of already installed package)
+rpm -U installed_packaged (to update a package)
+rpm -e installed_packaged (to remove a package)
+rpm -ql installed_packaged (to look at files installed by the package)
 rpm -qf /path/to/file (to look at which package  installed the given file)
+
+
+There are too many other 'rpm' options such as package verification, other install options and more

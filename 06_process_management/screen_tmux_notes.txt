@@ -1,0 +1,11 @@
+screen -R (look for an existing screen session and reconnect to it if possible)
+screen -ls
+screen -r process_id, or preferably screen -R
+
+<prefix> + x to get rid of a window
+tmux ls
+tmux attach -t <number> or just tmux attach when there is only one
+
+prefix + : followed by show-options -g
+set -ga for appending if more than one option exists
+/usr/share/doc/tmux/example_tmux.conf

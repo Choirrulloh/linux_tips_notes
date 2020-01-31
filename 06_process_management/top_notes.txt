@@ -1,0 +1,16 @@
+uptime, no. of users, load average
+
+breakdown of cpu usage for the system: %of usage by user's processes, %of usage by system processes, %of time spent running niced processes, % idle time, %of time spent waiting for I/O, hi: slow or overburdened storage, % of cpu time servicing interrupts, % time given to a hypervisor
+
+memory in kibibytes
+
+PID, USER, PRIORITY, NICE VALUE, VIRTUAL MEMORY THAT A PROCESS IS USING, RESIDENT MEMORY, SHARED MEMORY, STATE oF A PROCESS (S=SLEEP,R=RUNNING), %CPU, %MEM, TIME (CUMULATIVE TIME THAT PROCESS HAS USED SINCE IT WAS STARTED)
+
+only in linux:
+--------------
+lowercase x, change the sort column
+Reverse the sort order with R
+Renice a process (r) to change the priority of a process on the fly
+H = change between tasks and threads
+E = cycle through the orders of magnitude that memory is displayed in
+V = forest view

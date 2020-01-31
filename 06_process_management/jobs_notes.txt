@@ -1,0 +1,4 @@
+jobs
+fg, bg
+fg %2 (bring 2nd job to the foreground)
+bg %2

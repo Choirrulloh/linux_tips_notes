@@ -1,0 +1,2 @@
+ps='ps -cfjx' on macos
+ps='ps -fjH' on linux

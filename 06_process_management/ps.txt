@@ -1,4 +1,5 @@
-ps -C commandname
+pid can be released after a process terminates
+Only in linux, ps -C commandname
 show the process with that command name
 ps -fC commandname
 -f full-listing
@@ -7,8 +8,10 @@ instead of -f,  -jH for tree-format (helpful for human eyes)
 H = hierarchical
 j = jobs-format wherein we get process group id and session id as well
 
+SID is the process id of the session leader
+
 -u effective user
--U real-user
+-U real-user (seems to be preferred in Scott's video?)
 
 ps -u krishna shows a lot of options
 
@@ -17,7 +20,7 @@ better managed with ps -fHU krishna
 -e for everything
 might be useful with hierarchical view
 
-default kill signal is called sigterm (-15)
-more forceful signal is sigkill (-9)
+default kill signal is called SIGTERM (-15)
+more forceful signal is SIGKILL (-9)
 
-kill -l to get a list
+kill -l to get a list of all available values

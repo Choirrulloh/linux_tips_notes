@@ -1,0 +1,14 @@
+Consolidate internet access through a single host
+Conserve bandwidth
+Filter network traffic
+Easy management. One host only to internet
+Authorized users etc.
+
+
+Wasted bandwidth
+----------------
+Fairly large files on web, web fonts, images etc.
+apt upgrade etc. local caching helps (keep a cache of files requested through https)
+
+
+Is a server configuration

@@ -1,0 +1,3 @@
+By default, curl sends output to stdout
+curl -o  uri <filename>  (to download to a file)
+curl -O  uri   (to save to a file using the same name)

@@ -1,0 +1,67 @@
+binary vs source repos
+trivial repos vs official repos
+create either manually or use tools
+
+
+eg. of creating binary packages by hand
+
+What is a repo?
+Local Repository (for all users on a particular computer)
+    .deb files (package files in architecture-specific directories)
+    Packages file  (checksums and metadata for included packages)
+    Release file  (checksums of packages file)
+    Release.gpg file  (signature for Release file)
+    InRelease file  (inline-signed copy of Release file)
+
+
+Repo location:
+sudo mkdir /srv/myrepo  (parent directory, and will further contain architecture-specific subdirectories eg. i386, amd64 etc, non-architecture specific, use a folder called 'all')
+sudo mkdir /srv/myrepo/all
+sudo cp ~/myappl_1.0.deb /srv/myrepo/all/
+
+sudo apt install dpkg-dev (one-off installation)
+
+Next, create the Packages file which lists the name, version, architecture and other control fields for each of the package files in the repository. Also, includes the hashes of the package so that the package manager can check that it got all the bits it expected and nothing got corrupted
+
+To save some typing
+-------------------
+cd /srv/repo
+sudo -s
+
+apt-ftparchive packages . > Packages  (the option is 'packages')
+
+there is a similar program called dpkg-scanpackages
+cat Packages
+
+Next, create an index file called Release (which contains checksums for the Packages file). So that package manager can be sure that nobody was sneaky and changed both the package and its associated hash in the Packages file
+apt-ftparchive release . > Release  (the option is 'release')
+cat Release
+
+Now, have to sign the Release file, and provide a key for APT to use to verify that signature. This will take a few steps
+gpg --list-keys
+if you don't have an existing key, gpg --gen-key and then respond to the prompts
+
+gpg --armor --output Release.gpg --detach-sign Release and enter the passphrase used when the key was created
+This will create the signature file called Release.gpg
+
+Next, we will create a version of Release that is signed-inline
+gpg --clearsign --output InRelease Release
+
+Export a key for apt to use to verify the signature
+gpg --output mykey.gpg --armor --export
+
+Now, we have all of the files we need for a trivial repository
+
+Switch gears to use this repository
+-----------------------------------
+
+cd
+copy the key to the home folder
+
+cp /srv/myrepo/mykey.gpg .
+sudo apt-key add mykey.gpg
+sudo vim /etc/sources.list at the bottom, write
+   deb file:/srv/myrepo /  (using 'file' for a local repository)
+sudo apt update
+apt show myapp
+sudo apt install myapp

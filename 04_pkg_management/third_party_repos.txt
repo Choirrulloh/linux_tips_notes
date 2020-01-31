@@ -1,10 +1,10 @@
 Third party repositories
 
-apt repositories are listed at /etc/apt/sources.list and individual files in /etc/apt/sources.list.d/ directory
-nano /etc/apt/sources.list.d/plex.list 
+apt repositories are listed at /etc/apt/sources.list file and other individual files in /etc/apt/sources.list.d/ directory
+nano /etc/apt/sources.list.d/plex.list
 
 deb
-or deb-src
+or deb-src for binary or source-based packages
 
 deb https://downloads.plex.tv/repo/deb public main
 
@@ -13,9 +13,9 @@ sometimes 'testing'
 'main' branch
 curl https://downloads.plex.tv/plex-keys/PlexSign.key | sudo apt-key add -
 
-grep in /var/lib/apt/lists/  to know the actual name of the package
-
+grep in /var/lib/apt/lists/  to know the actual name of the package or easier to just use apt-cache like below:
 apt cache show "plex*"
+
 apt install plexmediaserver
 sudo rm /etc/apt/sources.list.d/plex.list
 sudo apt-key list
@@ -25,13 +25,17 @@ sudo apt-key del 'paste the long key here'
 
 for scripting, there is an easier way by using add-apt-repository. Same as above for getting the key
 
-sudo add-apt-repository "deb https://downloads.plex.tv/repo/deb public main"
+sudo add-apt-repository "deb https://downloads.plex.tv/repo/deb public main" which will automatically run apt update first
+
+The string in quotes above is the same as manually editing the /etc/apt/sources.list.d/ directory
+
+man sources.list for more information about this file
 
 
 For yum
 ------
-/etc/yum.conf
-/etc/yum.repos.d/
+/etc/yum.conf  which is equivalent to /etc/apt/sources.list
+/etc/yum.repos.d/ which is equivalent to /etc/apt/sources.list.d/ directory
 
 [PlexRepo]
 name=PlexRepo
@@ -41,4 +45,4 @@ gpgkey=https://downloads.plex.tv/plex-keys/PlexSign.key
 gpgcheck=1
 
 yum list plexmediaserver
-can host it somewhere and iinstall it using a cli tool called yum config manager
+can host it on a sever somewhere and install it using a cli tool called yum config manager. Take a look at its manpage

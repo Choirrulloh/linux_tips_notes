@@ -1,0 +1,22 @@
+used in SUSE linux
+zypper search nano
+
+status column
+i = automatically installed as part of base install
+i+ = user installed package
+v = a different version was installed by the user
+blank = package is not installed
+
+zypper info package
+zypper remove nano
+sudo zypper install pkgname
+
+zypper refresh (apt update equivalent)
+
+Patterns: a group of packages which together provide a capability or feature
+zypper search -t pattern
+zypper info patternname
+
+zypper update (apt upgrade)
+
+zypper can also install rpm packages

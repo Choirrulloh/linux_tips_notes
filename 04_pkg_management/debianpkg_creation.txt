@@ -1,6 +1,6 @@
 mkdir myapp_1.0
 mkdir myapp_1.0/DEBIAN
-nano myapp_1.0/DEBIAN/control
+nano myapp_1.0/DEBIAN/control and type in the following (without the indentations) minimum required fields as per the Debian policy manual
     Package: myapp
     Version: 1.0
     Maintainer: John Doe <john.doe@example.com>
@@ -8,13 +8,13 @@ nano myapp_1.0/DEBIAN/control
     Description: Lorem ipsum dolor software
     This software promises the world but delivers nothing
     important, hence be forewarned.
-mkdir -p myapp_1.0/usr/bin
-nano myapp_1.0/usr/bin/myapp
+mkdir -p myapp_1.0/usr/bin   (/usr/bin is where myapp_1.0 will end up on the target machine)
+nano myapp_1.0/usr/bin/myapp (the actual binary)
     #!/usr/bin/env bash
     echo "This text came from a custom application!"
 sudo chown -R root:root myapp_1.0/
-sudo chmod -R 755 myapp_1.0/usr/
-sudo chmod 644 myapp_1.0/DEBIAN/control
-dpkg-deb --build myapp_1.0/
-Linux Foundation Cert Prep: System Design and Deployment
+sudo chmod -R 755 myapp_1.0/usr/  (others can read and execute them)
+sudo chmod 644 myapp_1.0/DEBIAN/control  (everyone can read the control file)
+dpkg-deb --build myapp_1.0/  (make the actual package, i.e. the .deb file)
 
+See the course Linux Foundation Cert Prep: System Design and Deployment

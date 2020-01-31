@@ -1,0 +1,3 @@
+Save bandwidth (for updates by every machine) (redundant use of bandwidth)
+apt-mirror
+reposync (on redhat)

@@ -1,0 +1,78 @@
+On Server
+---------
+systemctl status sshd
+ufw allow 22/tcp
+ufw enable
+/etc/ssh/sshd_config (server config)
+/etc/ssh/ssh_config (client config)
+PermitRootLogin no
+PubkeyAuthentication yes
+PasswordAuthentication no
+systemctl restart sshd
+on a cloud VM, you typically get an internal IP address
+
+On Client
+---------
+apt install openssh-client
+
+who command should show the users logged in
+
+--------------------------------------------------------------------------------
+scp/sftp
+
+
+ssh-keygen
+permissions of the private key are pretty restrictive. Only the user has rw permissions
+
+public-key, starts with ssh-rsa CAPS_PUBLIC_KEY comments
+ssh-add to store the key on the keyring
+
+tail -f /var/log/auth.log
+
+To find the fingerprint of the key, we use
+ssh-keygen -lf <path_to_private_key>
+
+--------------------------------------------------------------------------------
+
+ssh tunnels
+-----------
+
+Forward traffic from a port on a local machine to a port on a remote machine
+Very common to use with database servers or development web servers where the service is not exposed to the internet wherein we cannot connect to it directly.
+
+Stop-over on an ssh-server
+Useful in securing servers. Reduce outside exposure to just one ssh server
+
+ssh -L local_client_machine>1024:remotehost:port_on_remote_machine user@remotehost
+ssh -L local_client_machine>1024:otherremotehost:port_on_remote_machine user@remotehost
+
+example: a website on port 80 running on remotehost, tunnelled to local port 1234
+
+
+After connecting, all we need to do is visit a web browser and type in address bar, localhost:1234
+
+
+ssh -L local_client_machine>1024:otherremotehost:port_on_remote_machine user@remotehost -N  (no shell)
+
+
+Browsing the web through a proxy
+---------------------------------
+SOCK proxy (socket secure). VPN for web traffic (rather than all traffic)
+forward traffic from client through proxy server as though its coming from the ssh server itself
+    can be used to control web traffic/web access
+    can allow web access from restrictive networks (quick and easy vpn, in coffee shop or airport wifi)
+
+ssh -D localport user@remotehost -Nqf
+-D (dynamic port forwarding)
+-N (no shell)
+-q (quiet)
+-f (fork the process into the background, requires killing with pid)
+-C (compress)
+
+check ip
+then configure browser
+check ip again
+SOCKS5 proxy manual configuration. localhost, port 4321
+send DNS queries also to the proxy server
+Doesn't affect cookies, cache etc. It is just one kind of protection. Does not avoid tracking etc.
+Introduce a little bit of slowdown

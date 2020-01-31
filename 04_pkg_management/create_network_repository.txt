@@ -1,0 +1,41 @@
+needs a static IP address
+nearly identical steps as for a local repo (For a barebones trivial repo)
+Hosted by a server like a web server or an FTP server (pretty minimal)
+
+On the server
+-------------
+sudo apt install apache2
+nano /etc/apache2/sites-enabled/000-default.conf
+apache virtual host set up to serve /var/www/html/ directory on port 80. Although we can set up with TLS for security
+
+The repo can be at the root of the web server or in a directory underneath it. Can either build it there or symlink it from somewhere else
+
+eg.
+mkdir /var/www/html/repo
+cd !$
+sudo -s
+mkdir all (or i386 or amd64 as appropriate)
+cp ~/myapp_1.0.deb all
+
+apt-ftparchive packages . > Packages
+In some cases, the Packages file needs to be compressed by piping through xz or gzip
+apt-ftparchive release . > Release
+gpg --armor --output Release.gpg --detach-sign Release
+gpg --clearsign --output InRelease Release
+If Packages change, recreate the index files, might need to create a script to save some time
+
+
+If not already done
+gpg --output mykey.gpg --armor --export
+
+ip a and note the ip address (say 10.0.2.13)
+
+Switch to client machine
+------------------------
+wget http://10.0.2.13/repo/mykey.gpg
+sudo apt-key add mykey.gpg
+sudo nano /etc/apt/sources.list
+    deb http://10.0.2.13/repo /
+sudo apt update
+apt show myapp
+sudo apt install myapp

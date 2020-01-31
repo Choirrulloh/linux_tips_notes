@@ -1,0 +1,20 @@
+sandbox is on top of a runtime (FreeDesktop, GNOME or KDE) - three runtimes as of 2019
+can be installed at system-level or user-level
+sudo apt install flatpak
+flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+flatpak search pattern
+flatpak search * (returns everything available on the remote)
+flatpak install flathub org.stellarium.Stellarium
+
+
+List of all installed flatpaks (flatpak list)
+
+flatpak info org.stellarium.Stellarium (details of a specific app)
+To run a flatpak, use flatpak run org.stellarium.Stellarium
+
+check for updates with flatpak update
+
+flatpak remove appname (org.stellarium.Stellarium)
+
+to cleanup things that no platpaks are using, we can use
+flatpak remove --unused

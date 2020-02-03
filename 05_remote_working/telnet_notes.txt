@@ -1,0 +1,28 @@
+Program for connecting with a service and communicating with them using text
+insecure!
+
+to use telnet, specify a host and a port to communicate on
+On server, sudo ufw allow 4000
+
+Start netcat on listening mode on port 4000 (will printout whatever it receives over the wire on port 4000)
+nc -l 4000
+
+
+on the client,
+telnet server_ip portno
+telnet 10.0.2.8 4000
+
+start typing a few lines
+
+ctl-] and back to telnet shell
+?  list of commands
+press enter to resume the connection and keep working
+need to escape back to telnet shell and type close
+can use this to test out mail servers (smtp), request info from unencrypted websites
+configure networking gear
+telnet rouxacademy.com 80
+GET / HTTP/1.1
+host: rouxacademy.com
+Press enter a couple of times
+
+The commands to send (such as GET) depends on what service you are interacting with on the other side

@@ -28,13 +28,27 @@ nc -lp  4545   (listen on port 4545)
 
 will appear on the above netcat session
 
+iptables rules are organized in chains. If not matching, the default action of the chain is taken. Chains can refer to other chains, which makes it possible to build fairly complex rules
+
+Need to export the entire set of information, and import it back again
+
+sudo iptables-save > myfirewallrules.txt
+
+vim myfirewallrules.txt
+top of file contains list of chains
+
+Then later on, we append rules to the chains using the -A command
+
+sudo iptables-restore myfirewallrules.txt
+
 sudo iptables -A INPUT -s source_ip -j DROP
--A (append to current set of rules in the input chain)
+-A (append to current set of rules to the specified chain)
 -s source address
 -j specifies the action to take
 
-sudo iptables -R INPUT 1 -s source_ip -p tcp --dport 4545 -j DROP
--R Replaces the above rule with a new rule to drop any tcp packets packets onto 4545 from the source ip 
+sudo iptables -R INPUT 1 -s source_ip -p tcp --dport 4545 -j DROP (or jump to another chain)
+-R Replaces the above rule with a new rule to drop any tcp packets packets onto 4545 from the source ip
+
 
 sudo iptables -D INPUT 1  (delete the rule above)
 
@@ -49,7 +63,7 @@ then ACCEPT rule
 
 sudo iptables -R INPUT 1 -s source_ip -p tcp --dport 4545 -j DROP
 
-Rate-limiting traffic (directed to ports 80 & 443) from anywhere 
+Rate-limiting traffic (directed to ports 80 & 443) from anywhere
 sudo iptables -A INPUT -p tcp -m multiport --dports 80,443 -m limit --limit 120/minute --limit-burst 250 -j ACCEPT
 
 
@@ -66,3 +80,12 @@ Check the NAT table
 -------------------
 sudo iptables -t nat -L -n
 
+
+ufw allow|deny port/protocol (default behavior of ufw is to deny access to anything not explicitly allowed)
+
+can also fine-tune a rule to allow/deny connections to a specific address or range of addresses, or on specific interfaces
+sudo ufw allow from 10.0.2.0/24 to any port 22
+sudo ufw status
+Rules are evaluated in the order in which they appear (permissive rule followed by restrictive rule, implies that the earlier rule will apply)
+sudo ufw delete (rule number or allow 22/tcp)
+For more complex rules, need iptables

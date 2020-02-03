@@ -1,0 +1,13 @@
+If a system is virtualized, time can drift away
+Stratum 1, 2 and 3 servers
+
+A common package for consuming and serving time information is "chrony"
+
+chronyc drops to a shell
+    sources command: see which timeservers the system is using
+    tracking command: how far off the system clock is from consensus time
+
+pool addresses is configurable in the /etc/chrony/chrony.conf file
+
+timedatectl command to check whether the system's clock is synchronised with ntp or not
+SSL won't work if time is too far off

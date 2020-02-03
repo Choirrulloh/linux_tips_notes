@@ -1,0 +1,9 @@
+md5sum
+sha1sum
+sha256sum
+
+md5sum myfile.txt myfile2.txt
+
+echo "d03fd97600532ef84ddc1e578ea843e9 myfile2.txt" | md5sum -c
+
+When using checksum to verify web downloads, important to get the checksum from a trusted (https) source. Some providers use a signed checksum relying on a cryptographic key stored on a key server

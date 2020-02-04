@@ -1,0 +1,21 @@
+afp, linux package is netatalk (separate password like smb)
+ftp = early days of the internet
+credentials or anonymous (for software distributions)
+iso files etc.
+can also upload
+
+vsftpd (server software)
+no security
+consider just using a web server if possible
+cloud storage choices such as s3, dropbox, box etc. is better idea
+
+
+sftp
+local accounts on a server
+filezilla, cyberdock
+just ssh credentials
+Access files within their own home folders on the server
+not really helpful for shared access
+can configure permissions, groups etc.
+
+Often best to use smb or nfs

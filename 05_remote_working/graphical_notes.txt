@@ -1,0 +1,57 @@
+wayland doesn't provide remote desktop
+
+startx
+VNC will share the entire desktop of the remote machine
+
+ssh -Y (enables trusted forwarding)
+X11 forwarding has its share of security vulnerabilities and speed problems
+Old approach designed for local networks
+Are sandboxed. Can't drag & drop a file from a remote system to a local system using the GUI file manager
+startxfce4
+
+
+To connect to a remote desktop
+------------------------------
+
+For server
+------------------------------
+Use VNC
+Uses the Remote Frame Buffer protocol to send the contents of the graphical display to a remote client
+TightVNC server
+apt install tightvncserver
+Install a desktop environment of choice
+Then run the vncserver command, which will set up a virtual display
+There are no users in the VNC authentication scheme (just passwords)
+VNC server starts display 1 onwards from port 5901 onwards
+Virtual display 2: port 5902
+Virtual display 3: port 5903
+etc.
+Open up firewall on these ports 5901 etc
+sudo ufw allow from 10.0.2.0/24 to any port 5901
+Not a good idea to expose a VNc server to the internet (due to that short 8 character password). This is not secure unlike SSH secured with a key
+vim ~/.vnc/xstartup
+comment out export XKL_XMODMAP_DISABLE=1 (if not using the Gnome desktop). Commenting out will help the xfce session we are using to get the right icons and an overall better experience
+/etc/X11/Xsession will call the default desktop environment (if u have more than one desktop environment, then needs different configuration)
+vncserver -kill :1
+start a new one with vncserver
+
+For client
+------------------------------
+vinagre is an option
+VNC viewer for chrome is an option too
+needs address and port information
+
+For better experience, set desktop background to a solid colour (instead of detailed photo or design)
+Turn off  screensaver
+
+NEVER ENABLE DESKTOP POWER SAVINGS to make sure that the remote server does not sleep. You cannot wake it up over vnc!!!
+
+
+Other remote access options
+--------------------------
+
+3rd party service to broker the connection between the server and the client
+Use outbound connections from both server and client to the 3rd party hub software
+eg. Bomgar, TeamViewer
+works with dynamic IP addresses
+Best for scale out, avoid individual configuration & provide roaming access

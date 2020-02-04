@@ -1,0 +1,91 @@
+mount storage space directly off the network
+In nfs, we mount a remote file system into our local filesystem
+
+Can use remote block storage, to mount block storage directly and then create a filesystem on it
+
+Can mount huge amounts of disk capacity on a host that doesn't have the physical capability to support it (and to keep storage separate from servers (risk mitigation)?)
+iSCSI
+storage is called 'target'
+our computer is called 'initiator'
+
+server config
+-------------
+apt install iscsitarget
+nano /etc/default/iscsitarget
+ISCITARGET_ENABLE=true
+
+nano /etc/iet/ietd.conf
+
+also need to define what the target is going to be. So edit
+nano /etc/iet/ietd.conf (iSCSI enterprise target)
+
+Target iqn.2018-02.com.example.server-vm:target0
+iqn = iSCSI qualified name
+date = date at which this target will become valid
+Then a reverse fqdn for the server
+network name (example.com)
+then server name
+unique name of the target (here target0)
+
+Then a newline
+Lun 0 Path=/srv/storage.img,Type=fileio
+Lun (logical unit number), luns must start with 0
+Path = path to a block device, like a file or partition, an LVM device or some other device
+Type=fileio is for caching, you can use blockio if you want direct block access
+
+can configure a lot of other things such as usernames and passwords, block sizes and a whole lot of things
+man ietd.conf
+
+
+Now, create the image storage.img
+
+systemctl restart iscsitarget
+
+
+Client-side
+-----------
+apt install open-iscsi
+iscsiadm to take a look at what targets I have available on my host machine (server machine)
+
+iscsiadm -m discovery -t st -p 10.0.2.10
+-m (mode)
+-t sets the target. st instructs the host to send a list of available targets to the initiator
+-p address of the portal (server)
+
+will return what was set on the server on port 3260
+
+
+iscsiadm -m node -T iqn.2018-02.com.example.server-vm:target0 -p 10.0.2.10 --login
+now, we will have a new block device
+fdisk -l
+will have /sdb or something
+
+
+Now you can create a partition and a regular filesystem on it
+fdisk /dev/sdb
+n
+p
+w
+mkfs.ext3 /dev/sdb1
+mkdir /mnt/remote
+mount /dev/sdb1 /mnt/remote
+
+
+/etc/fstab
+/dev/sdb1 /mnt/remote ext4 auto,default,_netdev 0 0
+
+What portal and target to use is tracked in /etc/iscsi/nodes folder
+
+Finally, need to instruct the iscsi daemon to automatically login to our node upon boot
+nano /etc/iscsi/iscsid.conf
+set  node.startup = automatic
+restart the iscsid service
+Run the discovery command again
+Then restart the system
+
+Typically ISCSI is used to provide storage to a server
+Popular in Storage Area Networks (SANs), over fiber or bonded ethernet for speed
+ideal fo LANs
+Not more than one system at a 19:12
+
+Consider NFS for more than one host

@@ -5,11 +5,25 @@ ufw allow 22/tcp
 ufw enable
 /etc/ssh/sshd_config (server config)
 /etc/ssh/ssh_config (client config)
+AddressFamily  (if necessary, restrict to listen on a specific local interface, or internal dmz)
+HostKey (the key information that the server will send back to the client)
+SysLogFacility AUTH (can set the level of detail of logging)
+LoginGraceTime 2m (how long do we have to enter our credentials)
+can set up Kerberos for organizational directory-based login
+PrintMotd yes
+PrintLastLog yes
+UsePAM yes (yes pluggable authentication modules. Allows local login or other kinds of authentication)
 PermitRootLogin no
 PubkeyAuthentication yes
 PasswordAuthentication no
 systemctl restart sshd
 on a cloud VM, you typically get an internal IP address
+
+
+Other directives not in the sshd server config file
+AllowUsers, AllowGroups
+DenyUsers, DenyGroups
+Or also ranges of network addresses or hostnames
 
 On Client
 ---------

@@ -55,16 +55,16 @@ Learning CentOS Linux, 2.11
 Building an Ubuntu Home Server, 2.16
 Learning Linux Command Line, 2.18
 Linux: Firewalls and SELinux, 2.22
-Practical Linux for Network Engineers: Part 2, 2.42
 Linux Performance Tuning, 2.43
 Linux: Bash Shell and Scripts, 2.46
 Setting up a Red Hat Enterprise Linux Server, 2.46
 SUSE Linux Enterprise Server Essential Training, 2.55
 Linux: Storage Systems, 3.30
 Practical Linux for Network Engineers: Part 1, 4.08
+Practical Linux for Network Engineers: Part 2, 2.42
 Linux Security and Hardening Essential Training, 4.15
-Cert Prep: Red Hat Certified System Engineer (EX300), 5.51
 Cert Prep: Red Hat Certified System Administrator (EX200), 6.23
+Cert Prep: Red Hat Certified System Engineer (EX300), 5.51
 Cert Prep: LPIC-1 Exam 101 (Version 5.0), 7.14
 Learning Linux Shell Scripting (2017), 8.19
 Cert Prep: CompTIA Linux+ (XKO-004), 9.19

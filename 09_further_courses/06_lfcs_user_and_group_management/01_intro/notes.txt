@@ -1,0 +1,53 @@
+users & groups
+--------------
+manage access & secure information for humans and software alike
+
+user: human or a service
+system or installed software will create users and groups
+system tracks by uid and gids rather than strings
+
+list of users: /etc/passwd
+list of groups: /etc/group
+
+don't edit directly. Use the selection of tools provided
+
+/etc/passwd (readable by everyone, writable by root)
+7 fields separated by :
+
+1 uname(32 chars, no spaces)
+2 passwd_in_shadow(x or blank)- readable only by root and members of the shadow group. Only root can write to it
+3 uid  - normal users are 1000 or above (used to start at be 500). Root has uid of 0. system accounts start from there
+4 gid - users primary group. Other groups are in /etc/group
+5 description (gecos) - more descriptive text (commas separating empty fields). GE Comprehensive Operating Supervisor
+6 homedir - starting point for logging in at the command line
+7 default shell - bash, /usr/sbin/nologin (refuses to let the user enter commands) or /bin/false (does nothing unsuccessfully)
+
+
+/etc/shadow (important to have propoer permissions)
+
+nine fields (only 2 required)
+1 uname:
+2 encrypted password - starting with ! is locked, * means no password is set
+3 date of last password change  (days since Jan 1, 1970 epoch) - if set 0, user will be prompted to change password upon next login. If empty, this feature that keeps track of password age is disabled
+4 min password validity (days) - empty means no min
+5 max password validity (days) - empty means no max; usually no max is set to 99999
+6 warning period (days) - empty implies no limit set. How many days before to warn; usually 7
+7 inactivity period (days)
+8 account expiration date (days since epoch) - empty implies no expiration
+9 reserved for future use
+
+/etc/group
+four fields
+group_name:encrypted_group_password:gid:csv_list_of_group_members
+
+groups command [u_name optionally]
+or id command [u_name optionally]
+
+
+
+
+
+
+
+
+

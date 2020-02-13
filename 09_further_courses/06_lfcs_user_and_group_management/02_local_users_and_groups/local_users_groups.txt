@@ -1,0 +1,72 @@
+adding users
+
+adduser, frontend for useradd
+/etc/adduser.conf for defaults
+
+create sub-folders for first letter of each username
+LETTERHOMES=yes
+
+sudo adduser myusername
+
+To switch as this user, issue the command: su myusername
+
+sudo adduser --system mysystemusername (for daemons and other processes)
+id mysystemusername
+
+
+passwd command (users can themselves change their passwords)
+
+admin can also change it using sudo passwd username
+
+chsh to change shell
+chfn (Change info in the gecos field)
+
+user's full name can be changed this way. But, user's login name has to be changed by usermod
+sudo usermod -l <newusername> <oldusername>
+sudo usermod -d </home/newusername> -m <newusername>
+-d sets home folder for an account. -m moves the home folder for a user
+
+deluser. can either backup user data or delete userdata
+
+
+Groups
+------
+
+addgroup (can do either a regular group or system group)
+
+sudo addgroup groupname
+id command shows that a new user's primary group name will correspond to their own username
+
+To add users to a group:
+    sudo adduser username groupname
+or  sudo usermod -a -G <groupname> <username>   !! ....note the change in the order!
+-a (append rather than replace)
+-G (list of groups to add to)
+
+id taylor
+id pat
+
+some settings are in /etc/addusers.conf
+
+groupmod command (change numeric groupid and the string-name of the group)
+delgroup for deleting a group
+
+
+Templated/Pre-configured environment for users/groups large-scale deployment
+----------------------------------------------------------------------------
+define a skeleton home folder (like /etc/skel)
+Global environment settings (to provide a tool or library in the PATH)
+/etc/adduser.conf  (DSHELL, which group new users are added to)
+can put anything in /etc/skel
+/etc/profile (global environment for all users)
+and in the folder called /etc/profile.d/
+
+Generally recommended to make a shell script inside the /etc/profile.d/ folder instead of directly editing /etc/profile script
+
+
+
+
+
+
+
+

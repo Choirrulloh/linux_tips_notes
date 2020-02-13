@@ -1,0 +1,37 @@
+TLS configuration for web server is important
+1. encrypt traffic
+2. verify authenticity of server
+
+let's encrypt is an awesome choice
+self-signed certificates have no trust relationships
+
+A certificate from a Certificate Authority allows the connection to be encrypted, and vouches for the authenticity of the server. .
+Though they usually cost a little bit of money, a certificate from a CA is recommended for all public web servers.
+
+openssl command creates a certificate and a key
+mycert.key goes into /etc/ssl/private
+cp mycert.pem into /etc/ssl/certs
+
+edit /etc/apache2/sites-available/default-ssl.conf
+change the SSLCertificateFile to /etc/ssl/certs/mycert.pem
+change the SSLCertificateKeyFile to /etc/ssl/private/mycert.key
+
+enable the site with a2ensite default-ssl.conf
+a2enmod ssl
+systemctl restart apache2
+
+Apache has two logs (access log and error log) /var/log/apache2/access.log
+error log /var/log/apache2/error.log (misconfigs, problems, warnings, php error log etc)
+Where can you customize Apache's log file format and location?
+/etc/apache2/apache2.conf and vhost .conf files.
+Apache's flexible logging allows very granular access to customize logs.
+
+
+If a browser requests a file that the web server can't find, there would be an entry in the /var/log/apache2/access.log file.
+
+nc localhost 1214
+ls -lh /proc/pid/fd
+nmap -sT -sU localhost (show open tcp and udp ports on my system)
+nmap -sT -sU -sV localhost (include a guess of service version numbers)
+
+telnet localhost 22

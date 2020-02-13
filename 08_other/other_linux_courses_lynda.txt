@@ -5,13 +5,13 @@ Linux Foundation Cert Prep: Remote Access (Ubuntu), 0.34
 Linux Foundation Cert Prep: Network Filesystems and File Services (Ubuntu), 0.36
 Learning SSH, 0.37
 Linux: Multitasking at the Command Line, 0.39
+Linux Foundation Cert Prep: Network Security (Ubuntu), 0.44
 Linux System Engineer: Bash Shell Scripting for Automation, 0.57
+Linux Foundation Cert Prep: Networking (Ubuntu), 0.58
 Unix for Mac OS X Users, 6.35
 
 To See
 ---------
-Linux Foundation Cert Prep: Network Security (Ubuntu), 0.44
-Linux Foundation Cert Prep: Networking (Ubuntu), 0.58
 Linux Foundation Cert Prep: User and Group Management (Ubuntu), 1.00
 Linux Foundation Cert Prep: Network Administration (Ubuntu), 1.02
 Linux Foundation Cert Prep: Service Configuration (Ubuntu), 1.03

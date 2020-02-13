@@ -1,0 +1,299 @@
+learning virtualbox is a useful course for learning how to configure two machines to be within the same LAN
+Foundations of networking series
+
+Ubuntu
+------
+2 ways to configure network settings
+1) config files (/etc/network/interfaces), /etc/network/*.d for scripts, which contains files configuring bringing it up/down etc (custom actions, wifi etc). The service name is "networking"
+2) NetworkManager service (interactive app, nmtui and nmcli)
+
+when NetworkManager is enabled, it won't manage interfaces listed in the /etc/network/interfaces file. Therefore both can co-exist on same machine (but best to keep a single workflow)
+Connections - group of settings for a device (interface)
+
+nmcli
+nmcli g[eneral]
+nmcli c[onnection]
+nmcli d[evices]
+nmcli c help
+
+Dynamic or static IP addressing
+-------------------------------
+ip a
+
+Predictable Network Interface Names
+-----------------------------------
+
+systemd can name interfaces
+
+onboard (built-in)   eno1, eno2. Intel NUC
+pci-x hotplug   ens1, ens2
+PCI card separate card (VM etc) referred to by its location on the bus. enp0s3. Slot 3 on pci bus 0
+Wireless/WLAN/Wifi wlp1s3
+By MAC address enx1a2b3c4d5e6f
+
+same interface is called the same name across reboots
+
+LOWER_UP (underlying network is connected physically)
+<xx,xx,DOWN,LOWER_UP> is possible
+link/ether (hardware MAC address of the interface)
+inet shows the ipv4 address
+inet6 shows the ipv6 address
+fe80::.... shows a link-local address, not a routable address
+
+ip -4 a
+
+
+ip route is handy to see the routes
+
+nmcli connection  delete "wired connection 2"
+
+Interactive new connection
+--------------------------
+
+nmcli connection edit
+connection type: ethernet
+drops u down to nmcli shell
+help
+
+print ipv4
+describe ipv4.method
+
+set ipv4.method auto (for a dhcp connection)
+
+for using specific dns-servers
+need to set ipv4.auto-dns no
+and then set the ipv4.dns list appropriately
+save  (to commit changes)
+
+print connection
+set connection.interface-name enp0s3
+set connection.id HomeNet
+save
+
+quit
+
+nmcli c
+
+
+for static ip config
+--------------------
+set ipv4.method manual
+set ipv4.addresses 10.0.2.10/24
+set ipv4.gateway 10.0.2.1
+set ipv4.dns 8.8.8.8
+save
+quit
+nmcli c
+
+
+Manual configuration
+
+sudo nano /etc/network/interfaces
+
+auto enp0s3  (bring up when system starts)
+iface enp0s3 inet dhcp  (tcp/ip networking)
+NetworkManager will respect manual changes
+sudo systemctl restart NetworkManager
+nmcli d (should show unmanaged)
+
+Now, restart networking
+auto enp0s3  (bring up when system starts)
+iface enp0s3 inet static
+address 10.0.2.20/24 or
+netmask 255.255.255.0 without a /24 in preceding address
+gateway 10.0.2.1
+dns-nameservers 8.8.8.8
+
+need to reboot the system to apply the change
+
+
+firewalls
+---------
+chains of rules
+nc -l 3000
+
+nc 10.0.2.20 3000
+ufw status verbose
+reject (to actively reject)
+
+
+ufw allow proto tcp from 10.0.2.6 to 10.0.2.20 port 3000
+
+default rules in /etc/ufw
+eg /etc/ufw/before.rules
+
+*<tablename>  indicates a new table with name 'tablename'
+: indicates chains
+config file for ufw is /etc/ufw/ufw.conf
+
+
+Router
+------
+We can configure a linux machine to be a router if needed!
+at least 2 network interfaces needed, and should be part of more than 1 network
+enabled by a kernel parameter called ipv4_forwarding
+
+cat /proc/sys/net/ipv4/ip_forward
+
+temporarily enable, sudo sysctl -w net.ipv4.ip_forward=1
+permanently enable, sudo vim /etc/sysctl.conf and uncommenting the same line in that file
+
+Give internet-facing devices like routers a unique public IP
+use other IPs on private networks
+10.0.0.0/8
+172.16.0.0/12
+192.168.0.0/16
+are reserved for private networks
+
+A router uses NAT
+modify the firewall to use masquerading
+
+Firstly need to change the firewall's default forwarding policy
+sudo vim /etc/default/ufw
+DEFAULT_FORWARD_POLICY="ACCEPT"
+then edit /etc/ufw/before.rules, and add the nat table rules to the top of the file
+
+*nat
+:POSTROUTING ACCEPT [0:0]
+-A POSTROUTING -s 10.0.2.0/24 -o enp0s8 -j MASQUERADE
+COMMIT
+sudo ufw disable
+sudo ufe enable
+sudo ufw start
+
+
+The gateway has routing tables, and knows where to send traffic outside the network
+local traffic is handled by the client, not the gateway
+
+can also add additional static routes on clients or routers (typically to routers)
+ip route command
+1st line shows the default route (gateway)
+2nd line shows how to send to a local network (typically)
+
+temporarily add route
+ip route add 10.0.3.0/24 via 10.0.2.6
+Permanent in /etc/default/interfaces under the interface name
+
+auto enp0s3
+    ...
+    ...
+    blah
+    ...
+    up route add 10.0.3.0/24 via 10.0.2.6
+
+
+With network manager,
+nmcli connection modify MyConnection ipv4.routes "10.0.3.0/24 10.0.2.6"
+
+Huge enterprise deployments and the internet use dynamic routing
+managed by software like zebra or quagga (successor to zebra)
+
+IP-IP tunnels
+SIT tunnels
+GRE tunnels
+
+creating a tunnel
+----------------
+need to know the IP address at each end
+need to create a network device for the tunnel at each end
+need to give the tunnel device an IP address at each end
+
+Router 1 IP: 12.34.56.78
+Router 1 Tunnel IP: 10.1.0.1
+Router 2 IP: 87.65.43.21
+Router 2 Tunnel IP: 10.1.0.2
+
+Temporarily
+On router 1:
+    ip tunnel add mytunnel0 mode gre remote 87.65.43.21 local 12.34.56.78 ttl 255
+    ip link set tunnel0 up
+    ip address add 10.1.0.1/24 dev mytunnel0
+On router 2:
+    ip tunnel add mytunnel0 mode gre remote 12.34.56.78 local 87.65.43.21 ttl 255
+    ip link set tunnel0 up
+    ip address add 10.1.0.1/24 dev mytunnel0
+
+Permanently
+-----------
+On /etc/network/interfaces
+
+On both:
+    auto mytunnel0
+    iface mytunnel0 inet static
+On Router1:
+    address 10.1.0.1    
+    netmask 255.255.255.0
+    pre-up ip tunnel add mytunnel0 mode gre remote 87.65.43.21 local 12.34.56.78 ttl 255
+    pre-down ip tunnel del mytunnel0
+On Router2:
+    address 10.1.0.2
+    netmask 255.255.255.0
+    pre-up ip tunnel add mytunnel0 mode gre remote 12.34.56.78 local 87.65.43.21 ttl 255
+    pre-down ip tunnel del mytunnel0
+
+Restart the networking service manually
+
+Time synchronisation
+--------------------
+VMs may have time drift or other weirdness with time
+chrony
+
+command-line chronyc (shell)
+help
+quit
+
+chronyc sources
+1st column under M is the source's mode
+^ (server)
+= (peer)
+# (time-source or gps clock)
+1st column (S = state)
+* (currently synced source)
++ (acceptable source for syncing)
+? (currently not reachable)
+x/~ (too far out of sync or too variable to trust)
+
+timedatectl
+
+vim /etc/chrony/chrony.conf
+scroll down to the allow directives section
+
+allow 10.0.2.0/24
+restart chrony service
+
+sudo ufw allow 123 (possibly just the udp)
+sudo systemctl restart ufw
+
+On the client side
+------------------
+
+Have to install and edit chrony conf file on the client system
+
+comment out the standard pool
+server 10.0.2.20 iburst
+iburst allow the system to be a little bit more aggressive about getting the time from the server
+if u have too many clients, please leave this off to reduce traffic on the server
+restart chrony service
+check with chronyc sources
+
+Network Performance Monitoring
+------------------------------
+Especially, if the system is running as a router
+bandwidth usage:
+iftop: traffic per host (typically on a router)
+nethogs: traffic per process (typically on a client system or a server)
+
+ss -tl (listening tcp connections)
+ss -ul (listening udp connections)
+
+
+
+
+
+
+
+
+
+
+
+

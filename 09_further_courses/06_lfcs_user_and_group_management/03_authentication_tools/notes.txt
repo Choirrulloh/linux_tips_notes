@@ -1,0 +1,39 @@
+PAM
+modular system to configure access
+apps using PAM have a file in /etc/pam.d/ and a series of .so files (will return a success or failure message based on what their authentication role is)
+the common- files are common across the various apps
+in these files, they start with lines that specify a condition and a module
+
+eg if a user calls the chsh command, PAM would look at /etc/pam.d/chsh to determine how to proceed
+eg
+
+auth    required        pam_shells.so
+        --------
+        control field
+
+auth service for authentication
+There are also password, account and session policy types
+
+This line is calling the pam_shells.so module (checks whether the user's current shell is listed in /etc/shells). If it is, it returns a success statement (else, returns a failure)
+
+Keep evaluating the rules in the file. The failure will only show up at the end. This is to prevent attackers from knowing in which module a failure happened
+
+There is another control called 'requisite' that would end the evaluation of the file immediately, and grant access it was a success (deny access if it received a failure)
+
+auth    sufficient        pam_rootok.so
+
+pam_rootok.so returns a success if the user is root (or uid 0). 
+
+sufficient: propagation stops, and pam says "yes, you can change your shell". If it returns a failure, doesn't really matter and we keep going
+
+in this case of the specific file, we go to the common files (at the bottom of the file)
+
+eg. common-auth
+
+checks the standard system-level access file, /etc/passwd , /etc/shadow, and /etc/group
+
+
+
+
+
+

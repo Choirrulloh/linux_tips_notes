@@ -1,0 +1,82 @@
+ldap-utils
+slapd (actual ldap server)
+can also manyally reconfigure using dpkg-reconfigure slapd
+enter admin password for ldap
+
+now, run dpkg-reconfigure slapd
+
+choose no for 1st prompt
+dns_domain: example.com (should be the fqdn)
+organization name: example.com
+type admin password again
+database backend: MDB
+remove database when slapd is purged: no
+move old database: yes
+allow ldap v2: no
+
+Managing the server side is a little byond the scope (non-trivial)
+
+easier admin tool is phd-ldap-admin (web based tool)
+also, ldap-modify tool is a professional tool 
+
+open a browser at localhost/phpldapadmin
+login with admin password
+
+Add a Group (OU)
+example: people, which will contain the users
+
+then start editing this new OU to add users in it (child entry)
+note that the numeric userid  must not be the same as a local account
+commit!
+
+choose the user, and change the uid
+
+
+client packages: nscd ldap-auth-client
+enter the URI of the server eg. ldap://something_pointing_to_the_server
+distinguished name of the search base
+dc=example,dc=com  (for example.com)
+dc is domain component
+
+
+choose ldap version 3
+make local root database admin: y/n? (enabled in the video)
+does the ldap database require login?: n
+ldap account for root: type the following:
+cn=admin,dc=example,dc=com
+ldap root account password (for admin on the ldap server): enter it here
+
+installation continues, and pam setup is done
+
+can also dpkg-reconfigure ldap-auth-client
+
+then edit /etc/nsswitch.conf file (name service switch) which contains information about where the system should look for password and group information
+
+edit the passwd, group and shadow lines
+compat: implies compatibility mode (directs nss to files on disk when looking for the user, /etc/passwd and such)
+if ldap comes first, and ldap server is down, can cause the system to hang at boot
+after compat , add the entry ldap 
+
+grep ldap /etc/pam.d/*
+these files are managed by the pam-auth-update tool
+
+run pam-auth-update, and verify that ldap is indeed checked
+
+can enable creation of home directory 
+nano /etc/pam.d/common-session
+find the line
+session optional pam_mkhomedir.so skel=/etc/skel
+sudo systemctl restart nscd
+
+after logging in as an ldap user, the id command should show the ldap numeric id
+
+manage carefully so that the local userid numbers and ldap userid numbers do not overlap/conflict
+
+
+
+
+
+
+
+
+

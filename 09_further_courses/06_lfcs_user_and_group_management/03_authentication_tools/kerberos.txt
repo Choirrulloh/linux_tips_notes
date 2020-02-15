@@ -1,0 +1,56 @@
+sso ticket
+
+kerberos server is called key distribution center (kdc)
+
+
+for this demo, fake a hostname by editing /etc/hosts
+127.0.0.1       kdc.example.com
+
+
+apt install krb5-kdc krb5-admin-server
+
+default kerberos 5 realm: EXAMPLE.COM
+Kerberos servers for your realm: kdc.example.com
+Administrative server for your Kerberos realm: kdc.example.com
+
+run krb5_newrealm to create our example.com realm
+enter a master key for the kdc database
+
+Run a kadmin.local command on the kdc server to add a user that I want to manage centrally
+
+addprinc <username>
+users & services in kerberos are called principles
+set a password for this user
+exit 
+
+in production setup, normally we would import them from ldap
+--------------------------------------------------------------------------------
+
+
+
+client configuration
+--------------------
+apt install krb5-user krb-config
+dpkg-reconfigure krb-config
+Default Kerberos 5 realm: EXAMPLE.COM
+cat /etc/krb5.conf
+
+kinit -p <username>@EXAMPLE.COM
+-p for principle
+gets a TGT
+
+klist
+
+apt install libpam-krb5
+
+grep krb /etc/pam.d/*
+
+can now login 
+
+can cache credentials in case users are on mobile
+
+libpam-ccreds package
+
+
+
+

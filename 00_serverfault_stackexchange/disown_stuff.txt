@@ -1,0 +1,29 @@
+Allow sub-processes to live beyond the shell that they are attached to.
+
+Keep job (do not disown it), but mark it so that no future SIGHUP is received on shell exit:
+disown -h %job_number
+Remember, that even if you type yourExecutable & and the outputs keep coming on the screen and Ctrl+C does not seem to stop anything, just blindly type disown; and press Enter even if the screen is scrolling with outputs and you can't see what you're typing. The process will get disowned and you'll be able to close the terminal without the process dying
+
+ctrl-z
+bg
+disown -h %job_number
+
+You can't disown a pid or process, you disown a job!
+
+--------------------------------------------------------------------------------
+
+Allows for a process to live when the terminal gets killed.
+Run process that can live beyond the terminal:
+nohup command options
+
+or nohup -p pid if the process is already started (only AIX & solaris)
+
+
+--------------------------------------------------------------------------------
+
+reptyr
+grab.c
+cryopid
+
+neercs is another option
+

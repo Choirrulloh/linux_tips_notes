@@ -1,0 +1,2 @@
+sshpass/plink (putty-tools)
+passh (github replacement for sshpass)

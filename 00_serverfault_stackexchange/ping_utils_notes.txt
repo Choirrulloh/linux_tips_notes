@@ -1,0 +1,24 @@
+ping a port
+-----------
+1. nmap -p 80 example.com
+-Pn to skip host discovery
+2. nping also works (from nmap)
+3. nc -vz host port (return code can be used in a test)
+4. telnet host port (non-scriptable; only for tcp ports)
+
+Other options for port pinging
+------------------------------
+hping3 (uses TCP instead of ICMP)
+paping
+cryping
+Test-NetConnection
+PortQry
+psping
+tcping
+
+
+Other ping replacements
+-----------------------
+oping
+fping
+2ping

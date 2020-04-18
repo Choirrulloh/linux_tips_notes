@@ -76,6 +76,7 @@ Linux Foundation Cert Prep: Email Services (Ubuntu) advanced, 0.41
 Linux System Engineer: Database Servers Using MariaDB, 0.48
 Python 3 SSH Network Automation Quick Start, 0.50
 CompTIA Network+ (N10-007) Cert Prep: 1 Understanding Networks, 0.51
+Learning VPN, 0.54
 Linux Foundation Cert Prep: HTTP Services (Ubuntu), 0.56
 Learning Tor and the Dark Web, 0.57
 CCNP Routing (300-101) Cert Prep: Network Principles, 1.00
@@ -100,6 +101,7 @@ Learning vi, 1.28
 Learning the Packet Delivery Process, 1.29
 Learning Subnetting, 1.31
 IT Security Foundations: Core Concepts, 1.35
+Cisco Network Security: Core Security Concepts, 1.35
 Operating System Forensics, 1.36
 CompTIA Server+ (SK0-004) Cert Prep: 1 Server Administration, 1.36
 IT Security Foundations: Network Security, 1.37
@@ -112,6 +114,7 @@ Protecting Your Network with Open-Source Software, 1.49
 Wireshark: Advanced Tools and Techniques, 1.49
 macOS for IT Administrators, 1.54
 CCNA (200-301) Cert Prep: Network Fundamentals and Access, 1.58
+Cybersecurity Foundations, 1.59
 Firewall Administration Essential Training, 2.00
 AWK Essential Training (beginner), 2.01
 SED Essential Training, 2.01

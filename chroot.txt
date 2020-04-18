@@ -1,0 +1,29 @@
+chroot
+Isolates a process from rest of the filesystem
+they can't access files outside their confined space
+This can be useful for troubleshooting
+For running a process in a space that is separated from the rest of the filesystem
+Sets an effective root directory that the process can't see outside of
+It can be used for some security purposes
+Often used to provide a clean environment for building software
+Not intended for complete security isolation
+Using chroot, can specify the path to a directory that will act as the root directory for the process
+Effective root of a new environment.
+Also need to have the tools or programs required inside the new root path, or provide links to those places on the system
+
+eg
+mkdir ~/newroot
+This will return an error: sudo chroot ~/newroot /bin/bash
+
+Most software has dependencies (shared libraries etc)
+Need to mount various parts of the filesystem such as /sys, /proc, or /bin inside the target root directory
+or copy specific files to the new root
+Very hard to get all dependencies right
+
+ldd /bin/bash (shows the dependencies)
+chroot is often used for rescue and installation
+
+arch chroot (in its install media)
+helpful for developers to set up a minimal environment
+set up a script to take care of dependencies and mounting required filesystems
+

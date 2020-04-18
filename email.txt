@@ -1,0 +1,3 @@
+postfix MTA
+dovecot MDA
+For internet routing, will need a domain name and appropriate MX records in your DNS

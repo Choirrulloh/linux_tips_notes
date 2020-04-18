@@ -7,3 +7,8 @@ Write message yourself with the logger command
 can configure remote logging in this config file to send to a centralised machine
 /etc/logrotate.d/logrotate.conf
 zcat and zless
+
+On linux can use journalctl
+on macs 
+the command is 
+log show --last 10s, for example

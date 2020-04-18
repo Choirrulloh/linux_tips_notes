@@ -1,0 +1,12 @@
+The script tool records and replays terminal activity
+optionally, can record a timing file
+
+script mysession
+
+do you commands
+C-D to end the recording
+
+script -t timingfile mysession2
+
+scriptreplay -t timingfile mysession2
+

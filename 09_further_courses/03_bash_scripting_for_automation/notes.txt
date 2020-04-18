@@ -237,3 +237,6 @@ for infinite loop, we just replace the condition with the word true
 can also use a manual break; statement
 can use regex inside an if [[]] conditional inside a while loop
 
+set -e
+set -o pipefail
+

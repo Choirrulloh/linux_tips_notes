@@ -1,0 +1,44 @@
+yes > /dev/null & (consumes 90%+ cpu resources)
+
+/etc/security/limits.conf  is part of the PAM (can limit memory, open files, hard disk usage, max file size, processor time, process priority && others by user or by group)
+look at the manpage for limits.conf
+
+username/groupname/wildcard  soft/hard item_to_be_limiting  value_of_limiting
+
+not more than 100MB file for pat (applied upon next login)
+pat hard fsize 10000
+
+Setting up quotas, using a package called quota (for limiting space on a per-user or per-group basis)
+sudo apt install quota
+filesystems must be remounted with support for user/group quotas
+edit fstab to include that and restart 
+
+example
+fallocate -l 100MB /myfilesystem
+mkfs.ext4 /myfilesystem
+mkdir /mnt/myfs
+mount -o usrquota /myfilesystem /mnt/myfs
+quotacheck -c /mnt/myfs
+edquota username/groupname (shall open up your editor)
+
+Filesystem  blocks soft hard inodes soft hard
+/dev/loop0  0      0    20M  0      0    0
+
+chmod 777 /mnt/myfs
+quotaon /mnt/myfs
+
+while the user is logged in, they can use the 'quota' command to check what their limitations on each filesystems are
+
+As an admin, can the repquota -a command to see a summary or a report on the quota status of my filesystems
+
+shared folders
+--------------
+chgrp groupname </path/to/sharedfolder>
+chmod g+rw </path/to/sharedfolder>
+chmod g+s </path/to/sharedfolder>  (2775, 2 for octal permissons)
+
+
+in /etc/sudoers file, the %sign at the beginning of an entry means that it is a group name
+eg 
+%sudo ALL=(ALL:ALL) ALL
+

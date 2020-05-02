@@ -1,0 +1,15 @@
+If u don't want to pay for a service, or if you want to host your own
+Nextcloud offers a self-hosted web app to do this
+
+snap takes care of setting up the web server and database server
+
+File sync (desktop/laptop & a server)
+needs static ip for nextcloud server
+Forward appropriate ports (80 or 443) through the firewall
+Register a domain name for the server if desired
+Has a convenient snap installer
+
+Open a browser and navigate to the service address, 10.0.1.100
+Set up an admin user and password
+
+For day-to-day tasks, we'll set up a separate regular user

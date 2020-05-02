@@ -1,0 +1,22 @@
+sudo apt install cups
+sudo systemctl enable cups
+sudo systemctl start cups
+management interface (service) runs on port 631
+under the default configuration the service is only accessible from the localhost
+So if you have to control remotely
+
+sudo cupsctl --remote-admin
+sudo ufw allow 631/tcp
+
+Open up a browser, type the server's IP address:portno (631) eg
+10.0.2.6:631
+
+To add printers, users must be in the lpadmin group
+sudo usermod -aG lpadmin scott
+
+HP printers like to use their own drivers
+sudo apt install hplip
+
+sudo hp-setup -i
+for interactive setup
+Look for printers that have gutenprint or another cups support

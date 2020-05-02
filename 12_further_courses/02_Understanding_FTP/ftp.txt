@@ -1,0 +1,33 @@
+Using a standard web host is a common scenario for using ftp
+Defined in 1971
+Many linux distro mirrors are ftp sites
+Company ftp sites for software, downloads, drivers etc
+ftp credentials are sent in plain text
+therefore create specific account credentials for ftp access that is never used for any other account
+alternatives are ftp-ssl and sftp
+ftp://uname:passwd@example.com:21/file.zip
+Originally designed for Active mode (server -> client when asked), but doesn't work anymore due to NATting
+Now, commonly used in passive mode where client controls and sets up the connection
+Default is port 22, but can open ports ad-hoc
+ftp command-line app
+ftp> open rouxacademy.com
+ls
+dir
+cd _images
+cd ..
+get index.htm
+lcd Desktop
+get index.htm
+mget *
+prompt
+(that will toggle interactive mode off)
+mget * (doesn't support recursive downloads)
+! (escape to shell)
+delete index.htm (from server)
+mdelete *
+put index.htm
+mput *
+mkdir test
+rmdir test
+? (for all commands)
+bye

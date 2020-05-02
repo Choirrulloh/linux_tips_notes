@@ -1,0 +1,176 @@
+isc-dhcp-server package on the server
+
+vim /etc/default/isc-dhcp-server  (interface)
+    INTERFACES="enp0s3"
+
+vim /etc/dhcp/dhcpd.conf  (subnet etc. and a whole bunch of things)
+    uncomment the line beginning with 'authoritative' to make the server authoritative
+    comment out for the time-being the lines beginning with 'option domain-name*'
+    subnet 10.0.2.0 netmask 255.255.255.0 {
+        range 10.0.2.20 10.0.2.220;
+        option routers 10.0.2.1;
+        option domain-name-servers 10.0.2.1;
+    }
+
+67/udp should be open on the server
+
+systemctl restart isc-dhcp-server
+
+On the client
+-------------
+vim /etc/network/interfaces
+
+iface enp0s3 inet dhcp   (<-- change this line, and comment out the address, netmask, gateway, dns-nameservers etc lines)
+
+sudo dhclient -r  (release the lease)
+sudo dhclient -v  (request a new lease)
+68/udp should be open on the server
+
+
+PXE = DHCP + TFTP
+
+PXE boot server
+sudo apt install tftpd-hpa
+
+vim /etc/default/tftpd-hpa
+    location is typically: /var/lib/tftpboot
+udp port 69
+
+--------------------------------------------------------------------------------
+
+mkdir /mnt/iso
+mount ~/Downloads/ubuntu-20.04.0-server-amd64.iso /mnt/iso
+
+cp -R /mnt/iso/install/netbook/*  /var/lib/tftpboot/
+
+vim /etc/dhcp/dhcpd.conf
+
+    subnet 10.0.2.0 netmask 255.255.255.0 {
+        range 10.0.2.20 10.0.2.220;
+        option routers 10.0.2.1;
+        option domain-name-servers 10.0.2.1;
+        allow booting;
+        allow bootp;
+        next-server 10.0.2.10;  (ip address of tftp server)
+        filename "pixelinux.0";  (one of the files copies from the installer earlier. This will act as the boot environment)
+    }
+
+systemctl restart isc-dhcp-server
+systemctl restart tftpd-hpa.service
+
+
+squid proxy
+-----------
+apt install squid
+systemctl status squid
+allow access on port 3128
+logs in /var/log/squid
+/var/spool/squid for cache
+
+configure firefox to use squid proxy
+visit a website
+
+then cat /var/log/squid/access.log
+
+
+/etc/squid/squid.conf
+one thing is
+cache_dir ufs /var/spool/squid 100 16 256
+aufs for asynchronous (100 MB cache)
+16 folders at 1st level
+256 folders within each of the 16
+
+Need to configure to allow traffic from other systems
+/etc/squid/squid.conf
+search for 'localnet'
+acl localnet src 10.0.2.0/24
+
+http_access allow localnet
+
+for user-level access control
+need to install apache2 server
+sudo htpasswd -c  /etc/squid/passwd scott
+enter the password next
+go to safe_ports section in the squid config file
+auth_param basic program /usr/lib/squid/basic_ncsa_auth /etc/squid/passwd
+acl auth_users proxy_auth REQUIRED
+http_access allow auth_users
+
+
+For clients to automatically use the proxy on the server, can set up a pac file
+proxy auto-config (PAC) script
+    javascript file hosted on a web server
+    contains information about proxies to use
+
+vim /var/www/html/proxy.pac
+
+function FindProxyForURL(url,host)
+{
+ return "PROXY 10.0.2.10:3128";
+}
+in the browser, choose automatic proxy configuration and put in the proxy url http://10.0.2.10/proxy.pac
+
+
+DNS
+---
+Locally, with hosts file and dnsmasq (local dns resolver)
+Organizationally, with DNS servers set up with BIND
+Globally, between root servers and other public DNS servers
+
+Every domain has a zone file, and DNS servers exchange zone information as needed
+
+Typically, a zone represents a particular domain (eg. example.com)
+can also represent a sub-domain (mail.example.com)
+
+sudo apt install bind9
+ls -l /etc/bind
+cat /etc/bind/named.conf
+
+vim /etc/bind/named.conf.local
+    zone "example.com" {
+        type master;
+        file "/etc/bind/db.example.com";
+    }
+
+    # reverse zone
+    zone "2.0.10.in-addr.arpa" {
+        type master;
+        file "/etc/bind/db.2.0.10";
+    }
+
+sudo cp /etc/bind/db.empty /etc/bind/db.example.com
+vim  /etc/bind/db.example.com
+
+after the TTL line, write the following:
+example.com.    IN      SOA     server-vm.example.com.  dnsadmin.example.com. (
+                blah )
+;
+@               IN      NS      server-vm.example.com.
+
+@               IN      A       10.0.2.10
+server-vm       IN      A       10.0.2.10
+
+www             IN      cname   server-vm
+
+sudo cp /etc/bind/db.empty /etc/bind/db.0.2.10
+
+2.0.10.in-addr.arpa    IN      SOA     server-vm.example.com.  dnsadmin.example.com. (
+                blah )
+;
+@               IN      NS      server-vm.example.com.
+
+10               IN      PTR       server-vm.example.com.
+
+sudo systemctl restart bind9
+
+sudo vim /etc/dhcp/dhcpd.conf
+        option domain-name-servers 10.0.2.10;
+
+configuring as an caching nameserver
+
+in named.conf.options
+    acl allowed {10.0.2.0/24; localhost; localnets;};   # above the options line
+    recursion yes; # within the options block
+    allow-query {allowed;};
+
+can configure "forwarders" to 8.8.8.8  to offload bandwidth demand

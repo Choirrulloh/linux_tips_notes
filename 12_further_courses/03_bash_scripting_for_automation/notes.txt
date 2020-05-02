@@ -1,0 +1,242 @@
+not good for handling json or xml
+no floating point math
+difficult to debug
+not object oriented
+
+bash -x (for full script; too much output)
+or 
+demarcate the subset of lines to be debugged surrounded by set -x & set +x
+
+
+In stdout, lines that start with the + symbol are the debugger lines
+
+debugger mode sends output to stderr. So can also do,
+./debug_trial.sh 2> debugger_output.txt
+
+A 3rd party debugger called bashdb is also available
+
+Variable scope 
+--------------
+1. Environmental variables which the entire OS can see
+eg PATH USER LOGNAME MAIL HOSTNAME HISTSIZE
+2. Variables in script (local to the script), eg VAR=10. This is the default and is available everywhere in the script
+3. Variables in script & subprocesses (exported) eg var=10; export VAR
+4. local variables (within code-blocks), using the local command
+testfunction ()
+{
+    local DATA
+    echo $DATA
+}
+
+Always quote your variables in a shell script
+$0 = name of script
+if not defined, $1,$2,$@,$* will be empty
+
+$1 1st argument passed to script 
+$2 2nd argument passed to script  etc
+$@ is all arguments (but will capture each arg separately)
+$* is also all arguments (but as a single entity)
+
+Read files within bash scripts
+------------------------------
+Two methods - 1. read command, and 2. mapfile command (readarray)
+read command can read line by line in a while including blanks (difficult with a for loop)
+
+while IFS= read -r LINE; do
+ the condition checks that we have lines to read
+
+IFS= 
+Internal field separator to nothing so that we can continue to read lines including spaces (blank lines) or  other characters
+
+-r disable (prevent) backslash interpretation, without this any unescaped backslashed will be discarded
+
+LINE the variable that contains a line of content from the file to be read
+
+mapfile command (readarray)
+
+another method of getting data into a script is to prompt the user with read -p
+
+-r (\ is not an escape character)
+-t (timeout if reading from stdin)
+-s (silent mode; don't echo whatever is typed; good for passwords)
+
+custom prompt
+-------------
+echo "Enter your favourite car"
+read CAR
+echo "Enter your three most favourite food items"
+read FIRST SECOND THIRD
+
+can read from pipes using the -p command
+
+finally, can make shell scripts accept command-line options
+use the getopts command
+is fairly complicated (see the getopts example, which uses $OPTARGS and $OPTIND etc,)
+getopts ":a"
+: turns off verbose errors, and a is the only valid option
+
+pipe to tee -a filename
+
+When writing files, if we need just temporary files
+
+tmpfile=$(mktemp -t scriptname.XXXXX)  (using a template by providing a -t optiont to mktemp)
+echo "message" >> $tmpfile
+
+tmpdir=$(mktemp -d dirname) (directories)
+
+can also create lock files to restrict writing to only one bash process
+flock seems like a linux-only command
+
+the if condition can be a test, or the successful execution of another command
+if grep root /etc/passwd ; then
+    success condition statements
+else
+    failure condition statements
+fi
+zero (0) is hero (success)
+
+
+if ! grep root /etc/passwd ; then
+    success condition statements
+else
+    failure condition statements
+fi
+one (1) is hero (success)
+
+Single vs Double Square Bracket conditionals
+single [] are POSIX compliant
+are commands that then test the condition
+first [] is really the built-in test command
+the 2nd [] is an argument to the 1st
+can also use /usr/bin/test to get the same results
+
+with single [] filename and word splitting happen (this may not be what you want)
+Parameter expansion also happens
+&& || < > operators get interpreted by the shell since the [] test isn't a statement but a command. The shell interprets these special characters for its own use
+Quoting is required to preserve variable values
+
+
+The double [[]]
+---------------
+
+They are not commands, but rather built into the bash shell as keywords
+Not POSIX compliant (specific to bash and ksh)
+Does not work with older shells
+No filename expansion happens between brackets (may be good)
+No word splitting happens between brackets (usually is good)
+parameter expansion and command substitution will happen
+support && || < > operators for boolean logic and complex tests as well as text order comparisons
+Automatic arithmetic evaluation of octal/hexadecimal
+support extended regex matches (really the killer feature)
+quoting is not required (area between brackets is protected. Although is still a good practice)
+Most of the time double [[]] is recommended. Single [] have more corner cases where they break
+[[]] are reliable, consistent and are the future
+
+case statement (can use globs - wildcards, charsets and character classes. Not regex though!)
+
+case $AGE in
+    [1-9]) echo "You are quite young!" ;;
+    [5-9]) echo "Time for elementary school" ;;
+    1[0-9]) echo "Time for middle school" ;;
+    [2-9][0-9]) echo "you are an adult" ;;
+    *) echo "That doesn't seem to be a valid age!" ;;
+esac
+
+no need of !! for the *) statement
+for age=5, only the 1st statement shall be executed
+
+In base 4.0 and greater, there are two new action terminators.   ;;&   and ;&
+case $AGE in
+    [1-9]) echo "You are quite young!" ;;&   (will continue to process matches, even if this matches)
+    [5-9]) echo "Time for elementary school" ;;
+    1[0-9]) echo "Time for middle school" ;&  (after executing this action, it automatically executes the next list without evaluating its pattern, eg. if age is between 10 & 19 included, the next action list will also be executed)
+    [2-9][0-9]) echo "you are an adult" ;;
+    *) echo "That doesn't seem to be a valid age!" ;;
+esac
+
+<,>,= are string comparison operators (but is possible to use in math (()) conditions )
+-lt -gt -le -ge -eq -ne are the numeric comparison operators
+
+((a=17+23))
+a=$((17+23))
+depending on if we want the result on the stdout or not
+
+(()) returns a return-code depending on the outcome of the expression. When used as the conditional in an 'if' condition, returns zero (0) if the condition is true
+
+
+string comparison
+-----------------
+variable-to-variable, or variable-to-static-string
+character by character
+
+is a variable empty (zero-length)?
+if [[ -z $VAR]]
+
+is a variable nonzero-length)?
+if [[ -n $VAR]]
+
+single equal (=) sign for equality check of strings
+!= sign for equality check of strings
+<, > for checking sort order (uses ascii codes & not the current locale settings)
+
+
+File conditions
+-----------------
+-e if file exists (useless, since everything is a file on linux, including devices)
+-f if file exists and is actually a file
+-d if file exists and is a directory
+-c if file exists and is a character device
+-b if file exists and is a block device
+-p if file exists and is a named pipe
+-S if file exists and is a socket
+-L if file exists and is a symbolic link
+-g if file exists and has the sgid bit set
+-u if file exists and has the suid bit set
+-r if file exists and is readable by the current user
+-w if file exists and is writable by the current user
+-x if file exists and is executable by the current user
+-s if file exists and is greater than 0 bytes in size
+-nt if a file is newer than another
+-ot if a file is older than another
+-ef if two files have the same inode number
+
+When needing to get file information, it is better to use getattributes (linux only?) or stat, but never ls
+
+# (old way)
+for item in $(seq 1 10) ; do  
+    process $item
+done
+
+# (new way). Reliable and faster since a new subshell is not spawned
+for item in {1..10} ; do  
+    process $item
+done
+
+for loop uses the IFS to word split. IFS by default splits on blank spaces
+for file in $(find /etc); do
+    process $file
+done
+might be problematic if the filename has a space in it.
+Can change the IFS while looping
+
+OLDIFS="$IFS"
+IFS=$'\n'
+for file in $(find /etc); do
+    process $file
+done
+IFS="$OLDIFS"
+better idea is to use while read
+
+Parameters are expanded before math and variable expansion
+
+you can use a break statement inside a for loop
+
+while loop and until loop
+can match on wildcards but not regex
+for infinite loop, we just replace the condition with the word true
+can also use a manual break; statement
+can use regex inside an if [[]] conditional inside a while loop
+
+set -e
+set -o pipefail
+

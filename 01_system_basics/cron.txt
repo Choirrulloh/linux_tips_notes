@@ -11,7 +11,7 @@ redhat uses /etc/anacrontab instead for these intervals
 
 on the user crontabs, the user field will be blank
 
-can put scripts in cron.hourly, daily, week;y & monthly directories if we want
+can put scripts in cron.hourly, daily, weekly & monthly directories if we want
 
 more control of time when to run: /etc/cron.d directory instead
 

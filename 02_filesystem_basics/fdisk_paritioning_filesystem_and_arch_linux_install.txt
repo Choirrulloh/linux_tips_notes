@@ -1,0 +1,86 @@
+fdisk -l should list all the disks installed; /dev/sda, /dev/loop0 etc
+
+Decide which disk to install to
+
+fdisk /dev/sda  (an 80GB disk)
+o (to create a new MBR partition table)
+n (new partition)
+p (primary)
+1 (partition no.: 1, 2 etc)
+First Sector:  can leave blank
+Last Sector:  +79G (leaving 1GB for the swap)
+
+For swap
+--------
+n
+p
+2
+a 1GB partition will have been created at this point
+t (to change the type of the partition created to swap)
+2 (partition number)
+82 (hex code for a LinuxSwap partition)
+
+Have a look at the partition table and write it to disk with w
+w
+
+Next, create the root and swap filesystems
+------------------------------------------
+mkfs.ext4 /dev/sda1 (primary root filesystem)
+mkswap /dev/sda2  (for creating swap filesystem)
+swapon /dev/sda2
+
+mount /dev/sda1 /mnt
+
+For an arch install, need to pacstrap
+
+pacstrap /mnt base linux linux-firmware
+
+genfstab -U /mnt >> /mnt/etc/fstab
+arch-chroot /mnt
+ln -sf /usr/share/zoneinfo/America/Los_Angeles /etc/localtime
+or
+ln -sf /usr/share/zoneinfo/Europe/London /etc/localtime
+locale-gen
+
+Need to create a few files
+--------------------------
+pacman -S vi
+vi /etc/locale.conf
+    LANG=en.US.UTF-8
+
+vi /etc/hostname
+    "put name of the machine in here without quotes"
+
+vi /etc/hosts
+    127.0.0.1   localhost
+    ::1         localhost
+    127.0.1.1   machine_name.localdomain machine_name
+
+Complete the network configuration using a tool of your choice
+pacman -S dhcpcd
+systemctl enable dhcpcd@predictable_network_interface_name_like_enp0s3
+
+Then set a root password for the system
+passwd
+    follow the prompts
+
+Install a bootloader
+pacman -S grub
+grub-install --target=i386-pc /dev/sda
+pacman -S intel-ucode
+grub-mkconfig -o /boot/grub/grub.cfg
+
+Shutdown the system, remove the installation media and start it up again
+shutdown -h now will not work because we are chrooted
+exit
+shutdown -h now
+
+useradd -m scott
+passwd scott
+
+pacman -S xorg-server xf86-video-vmware xfce4 xorg-fonts-100dpi gnu-free-fonts
+
+no sudo package
+
+so  su root
+startxfce4

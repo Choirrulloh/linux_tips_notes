@@ -1,0 +1,30 @@
+Set of tools that lets u gather system_info in a way that can be queried like a relational database
+construct periodic reports to show info like processes, launch items, open ports
+osqueryi (interactive shell to explore)
+osqueryd (daemon to run on systems where we want to collect information)
+osqueryctl (service control program to manage the daemon)
+information is presented as a series of tables
+to find those tables, type .tables
+
+To read information from these tables, use straight forward SQL
+select * from system_info;
+
+for a little bit more readable output
+.mode line
+
+select * from python_packages
+To narrow this down a bit, .scheme command for the create statement for the table
+.scheme python_packages
+
+select version from python_packages where name="parallax";
+
+To record information on an ongoing basis, need to run osqueryd
+
+Need a config file to tell it how to operate
+sudo nano /etc/osquery/osquery.conf
+Looks like a json format
+
+then sudo osqueryctl start
+Information will be logged into the local database. WIll have some log files about the status and results of the logging operations
+cd /var/log/osquery
+To log centrally, use a combo of rsyslog, splunk, logstash and more (see the osquery doc)

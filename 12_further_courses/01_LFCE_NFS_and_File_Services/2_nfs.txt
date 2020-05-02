@@ -1,0 +1,69 @@
+NFS (files access over a network), developed at Sun Microsystems
+shared folders and user-home folders in a multiuser network env
+nfs shares are called exports
+Access to nfs shares (exports) are granted to (hosts) computers, rather than users
+Typically wired computers in a lab or organisational setting (like a hard drive or USB disk)
+Prefers an ethernet cable (not a great idea over internet). Preferably only over a LAN
+
+Permissions
+-----------
+Storage accessible at the host or system level
+Security task is relegated to filesystem permissions
+uses numeric ID of users accessing files on the export to determine access
+if a user has ID 1005 in a machine, and a different user has ID 1005 on another machine, and they connect to a server, each user will have access to the other's files (since they have same numeric IDs)
+Controlling UIDs is important, especially for user home folders
+or we can configure nfs to simply ignore the UID completely
+and specify a different one that all users would use instead if you want a big shared space where ownership does not matter
+
+
+Server side
+-----------
+apt install nfs-kernel-server
+mkdir /srv/shared
+touch /srv/shared/file{1..10}
+config file is /etc/exports
+contains name of exports and the systems that are allowed to access them
+eg config
+use either ip address or fqdn or hostname (options within parenthesis, without leading parenthesis). One line per host. Blank parenthesis indicates read-only mounting
+/srv/shared 10.0.2.0/24(rw)
+
+Root squash
+-----------
+numeric uid is what is used to determine the share access
+client UID = server UID  (eg. 1005 on client would have 1005 on server). Need co-ordinated creation of users on network or a centralised authentication scheme, we can sort this out.
+But, if logged in as root on the workstation (uid=0) and then connect to server! They are root to the share on the server too!
+root_squash directive indicates remap of uid 0 to 'nobody' user to limit access
+all_squash will apply this behavior to all users
+no_root_squash is the default (turns off this behavior)
+/srv/shared 10.0.2.0/24(rw,root_squash)
+Then run exportfs
+systemctl status nfs-server
+Then set individual folder/file permissions
+
+
+Client setup
+------------
+apt install nfs-common
+mkdir /mnt/sharedfiles
+mount 10.0.2.10:/srv/shared /mnt/sharedfiles
+can also mount the srv directory. Any other subfolders will also appear automatically
+umount /mnt/shared
+
+nfsstat -mounts
+
+/etc/fstab
+10.0.2.10:/srv/shared /mnt/sharedfiles nfs4 defaults 0 0
+defaults - let the client and the server determine what settings to use
+restart the system or mount -a
+
+NFS config in details
+--------------------
+defaults should be fine for most people in most situations
+sync option - write to disk asap (default)
+async option - faster writes, possible data loss upon power failure
+nobody user = anonymous
+anonuid=uid/anongid=gid
+man exports
+
+
+On the client side, can set timeouts, size of requests to use when transferring data

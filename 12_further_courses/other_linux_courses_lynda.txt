@@ -13,6 +13,7 @@ Unix for Mac OS X Users, 6.35
 
 To See
 ---------
+Linux Foundation Cert Prep: HTTP Services (Ubuntu), 0.56
 Linux Foundation Cert Prep: Network Administration (Ubuntu), 1.02
 Linux Foundation Cert Prep: Service Configuration (Ubuntu), 1.03
 Linux: Overview and Installation (beginner), 1.03
@@ -77,7 +78,6 @@ Linux System Engineer: Database Servers Using MariaDB, 0.48
 Python 3 SSH Network Automation Quick Start, 0.50
 CompTIA Network+ (N10-007) Cert Prep: 1 Understanding Networks, 0.51
 Learning VPN, 0.54
-Linux Foundation Cert Prep: HTTP Services (Ubuntu), 0.56
 Learning Tor and the Dark Web, 0.57
 CCNP Routing (300-101) Cert Prep: Network Principles, 1.00
 Learning Networking, 1.00

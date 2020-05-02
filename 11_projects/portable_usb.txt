@@ -1,0 +1,16 @@
+mkusb tool
+lsblk
+sd(x) will be completely erased
+Needs a ppa to work sudo add-apt-repository ppa:mkusb/ppa
+
+sudo apt install mkusb mkusb-nox usb-pack-efi
+run mkusb and a tui will be presented with questions
+choose persistent (p)
+and usbpackefi (instead of grub)
+choose % of available space for persistence
+will create a bootable usb with 5 filesystems (output of lsblk command afterwards)
+    usbboot (boot partition)
+    read-only system partition (lower fs in overlay fs terminology)
+    casper-rw (holds the upper fs where modifications to the system will be saved)
+    usbdata (for user data)
+change to usb-startup (F10 or similar) and in the usbpackefi (grub-equivalent) menu, select the persistent live environment

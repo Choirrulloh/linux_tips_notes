@@ -1,0 +1,11 @@
+To host a web page
+------------------
+
+- web server
+- network or internet access
+- static IP
+- open ports (80/443)
+- Domain name purchased from a registrar
+- Purchase a TLS certificate (free option called let's encrypt exists)
+
+

@@ -1,7 +1,0 @@
-mkusb tool
-lsblk
-sd(x) will be completely erased
-Needs a ppa to work
-sudo apt install mkusb mkusb-nox usb-pack-efi
-choose persistent
-and usbpackefi
